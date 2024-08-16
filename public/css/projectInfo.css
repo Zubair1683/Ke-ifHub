@@ -1,0 +1,298 @@
+
+
+/* Styles for project names */
+.ProjectName {
+    display: flex;
+    background-color: #e1e1e0;
+    height: 80px;
+    width: 30%;
+    margin-bottom: 30px;
+    margin-left: 20px;
+    border-radius: 15px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Styles for project view section */
+.ProjectView {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    padding: 10px 10px;
+    margin-bottom: 30px;
+}
+
+/* Styles for project view photos */
+.ProjectVPhoto {
+    background-color: #32394e;
+    height: 300px;
+    width: 30%;
+    border-radius: 10px;
+}
+
+/* Styles for project view photos inside images */
+.ProjectVPhoto img {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+}
+
+/* Styles for project view information */
+.ProjectVInfo {
+    display: flex;
+    position: relative;
+    background-color: #e1e1e0;
+    width: 60%;
+    border-radius: 10px;
+    transition: transform 1s ease;
+    padding: 2% 2%;
+}
+
+.ProjectVInfo h1 {
+    margin: auto;
+}
+
+.rotate {
+    transform: rotateX(180deg);
+}
+
+.buttonrotate {
+    transform: rotateX(180deg);
+    position: absolute;
+    top: 10px;
+}
+
+.infobutton {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    height: 20px;
+    padding: 2px 3px;
+    border-radius: 10px;
+    border-style: none;
+    background-color: #adadac;
+    color: #d1d4cf;
+    cursor: pointer;
+    transition: 1s ease;
+    box-shadow: 2px 2px 5px #1a2523;
+}
+
+.infobutton:hover {
+    background-color: #979795;
+}
+
+.infobutton:active {
+    background-color: #666665;
+}
+
+.ProjectVInfo p {
+    padding: 10px 10px;
+    text-align: justify;
+}
+
+.hide {
+    display: none;
+}
+
+/* Styles for project others section */
+.ProjectOthers {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 10px;
+}
+
+/* Styles for heading level 4 elements */
+h4 {
+    margin-top: 2px;
+}
+
+
+/* Styles for project comments section */
+.ProjectComment {
+    min-height: 620px;
+    width: 50%;
+}
+
+/* Styles for project recommendations */
+.ProjectRec {
+    background-color: #e5e5e55d;
+    min-height: 300px;
+    width: 30%;
+    border: 2px dotted rgb(192, 192, 192);
+    border-radius: 10px;
+    padding: 10px 20px;
+}
+
+.ProjectRec h1 {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.ProjectRec div {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.ProjectRec h4 {
+    margin-top: 5px;
+}
+
+.addComment {
+    background-color: #ebebeb;
+    min-height: 300px;
+    margin-bottom: 20px;
+    padding: 2% 8%;
+    border-radius: 10px;
+}
+
+/* Styles for all comments */
+.allComments {
+    background-color: #e5e5e55d;
+    min-height: 300px;
+    padding: 20px 20px;
+    border: 2px dotted rgb(192, 192, 192);
+    border-radius: 10px;
+}
+
+/* Styles for full names in comments */
+#fullName {
+    min-height: 40px;
+    width: 70%;
+    margin-bottom: 10px;
+    padding-left: 10px;
+}
+
+/* Styles for adding comment section headings */
+.addComment h2 {
+    margin-bottom: 15px;
+}
+
+/* Styles for comment input fields */
+.comment {
+    min-height: 150px;
+    width: 100%;
+    padding: 10px 10px;
+    margin-bottom: 5px;
+    resize: none;
+}
+
+label {
+    font-weight: bold;
+}
+
+textarea {
+    margin-top: 10px;
+}
+
+#send {
+    width: 50%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 50%;
+}
+
+/* Media query for screens up to 1200px wide */
+@media screen and (max-width:1200px) {
+    main {
+        display: block;
+    }
+
+    .title {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    .pagging {
+        margin-bottom: 2%;
+    }
+
+    .ProjectView {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .ProjectOthers {
+        display: block;
+        
+    }
+
+    .ProjectComment {
+        min-height: 620px;
+        width: 70%;
+        margin-bottom: 20px;
+    }
+
+    .allComments {
+        min-height: 250px;
+    }
+
+    .addComment {
+        min-height: 260px;
+        margin-bottom: 10px;
+    }
+
+    .ProjectRec {
+        width: 100%;
+        height: 200px;
+    }
+
+    .ProjectVPhoto {
+        margin-bottom: 30px;
+        width: 45%;
+        height: 250px;
+    }
+
+    .ProjectVInfo {
+        width: 80%;
+        min-height: 300px;
+    }
+
+    .ProjectVInfo h1 {
+        text-align: center;
+    }
+
+    .ProjectName {
+        height: 70px;
+        margin-bottom: 20px;
+    }
+}
+
+@media screen and (max-width:800px) {
+    main {
+        margin-top: 16%;
+    }
+
+    .ProjectVPhoto {
+        width: 60%;
+    }
+
+    .ProjectName {
+        height: 60px;
+        width: 70%;
+    }
+
+    .pagging {
+        width: 30%;
+    }
+
+    .ProjectVInfo {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width:600px) {
+    main {
+        margin-top: 20%;
+    }
+}
+
+/* Style emoji button*/
+.initialEmojiButton {
+    border-radius: 15px;
+    background-color: grey;
+    padding: 3px 3px 3px 3px;
+    border: none;
+    color: #ffffff;
+}

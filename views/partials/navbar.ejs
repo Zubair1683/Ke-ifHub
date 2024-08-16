@@ -1,0 +1,34 @@
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">YelpCamp</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link" href="/home" id="navlink">Home</a>
+                <a class="nav-link" href="/campgrounds" id="navlink">Show Campgrounds</a>
+            </div>
+            <% if(currentUser){ %>
+                <a class="nav-link" href="/campgrounds/new">New Campground</a>
+                <div class="navbar-nav ml-auto">
+                    <a class="nav-link" href="/prof" id="navlink">
+                        <%= currentUser.username %>
+                            <% if(currentUser.image){%>
+                                <img src="<%= currentUser.image.url %>" id="profileImage"  style="height: 40px; width: 40px;">
+                                <%}else{%>
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiZfk_mBRRAnMVpDjIrMbiU5DUxjWeZ5nqRQ&usqp=CAU" id="profileImage"  style="height: 40px; width: 40px;">
+                                <%}%>
+                       </a>
+                    <a class="nav-link" href="/logOut" id="navlink" style="margin-top: 6px;">Log out</a>
+                </div>
+                <% } else { %>
+                    <div class="navbar-nav ml-auto">
+                        <a class="nav-link" href="/logIn" id="navlink">Login</a>
+                        <a class="nav-link" href="/signUp" id="navlink">Sign Up</a>
+                    </div>
+                    <% } %>
+        </div>
+    </div>
+</nav>

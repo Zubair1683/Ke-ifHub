@@ -1,0 +1,30 @@
+<% layout('./layouts/boilerplate2')%>
+<div class="row vh-100 pt-5" style="background-image: url('https://t4.ftcdn.net/jpg/02/16/47/33/360_F_216473351_FCLq1pZQOBFrgcyPBphKvBd8Z5wjD1dI.jpg'); 
+background-repeat: no-repeat; background-size: cover; background-position: center;"> 
+    <div class="col-4 offset-2 text-white pt-5 pb-5 border border-dark"  style="height: 520px; padding: 10px;  backdrop-filter: blur(10px); box-shadow: 10px 10px 50px 5px rgb(21, 132, 173);">
+        <h1 class="text-center pb-5">Login</h1>
+        <form action="/logIn" method="POST" novalidate class="validated-form">
+            <div class="d-flex flex-column justify-content-center">
+                <div class="m-auto mb-3" style="width: 70%;">
+                    <label class="form-label" for="Username">Username</label>
+                    <input class="form-control" type="text" id="Username" name="username" autofocus required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="m-auto mb-3" style="width: 70%;">
+                    <label class="form-label" for="password">Password</label>
+                    <input class="form-control" type="password" id="password" name="password" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="m-auto mb-5" style="width: 70%;">
+                    <button class="btn btn-dark" style="width: 100%; height: 50px; box-shadow: 5px 5px 5px 2px rgb(34, 34, 34);">Login</button>
+                </div>
+            </div>
+            
+        </form>
+        <h5 style="text-align: center; font-size: smaller; ">Don't have an account? <a href="/signUp" style="color: white;"><b>Register</b></a></h5>
+    </div>
+</div>

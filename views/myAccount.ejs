@@ -1,0 +1,47 @@
+<% layout('./layouts/boilerplate2')%>
+<div class="row">
+  <div class="col-4 offset-1">
+    <h1><%=currentUser.username%></h1><hr>
+    <a href="/about" class="btn btn-info">Get information about me</a>
+    <a href="/contact" class="btn btn-info">Get contact with me</a><hr>
+  </div>
+    <h1 class="text ml-5 mb-3">Add project</h1>
+    <div class="col-4 offset-1">
+        <form action="/addProject/<%=currentUser._id%>" method="POST"  novalidate class="validated-form" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label" for="title">Title</label>
+                <input class="form-control" type="text" id="title" name="title" required>
+                <div class="valid-feedback">
+                  Looks good!
+              </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="shortInfo">Short Info</label>
+                <input class="form-control" type="text" id="shortInfo" name="shortInfo" required>
+                <div class="valid-feedback">
+                  Looks good!
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="">Upload images</label>
+              <div class="form-file custom-file">
+                <input type="file" class="form-file-input" id="image" name="image" multiple>
+                <label class="form-file-label" for="image">
+                    <span class="form-file-text custom-file-label">Choose image(s)...</span>
+                    <span class="form-file-button">Browse</span>
+                </label>
+            </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="info">Detailed Info</label>
+                <textarea class="form-control" type="text" id="info" name="info" required></textarea>
+                <div class="valid-feedback">
+                  Looks good!
+              </div>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-success">Submit</button>
+            </div>
+        </form><hr>
+    </div>
+    

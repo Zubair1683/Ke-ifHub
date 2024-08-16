@@ -1,0 +1,157 @@
+#navlink {
+    color: black;
+}
+
+/* Main section styles */
+main {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 20px;
+    background-color: #FAF9F6;
+    border-radius: 10px;
+}
+.mainInfoText {
+    min-height: 50px;
+    overflow: auto;
+    margin: 10px 5px;
+    background-color: #e0e1df;
+    padding: 20px 20px;
+    border-radius: 10px;
+    font-size: 1.2em;
+}
+/* Styles for the projects container */
+.projects {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-left: 10px;
+    width: 70%;
+    background-color: #e0e1df;
+    padding-top: 50px;
+    border-radius: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+#searchbackground {
+        background-image: url('https://www.shutterstock.com/image-photo/businessman-holding-light-bulb-illuminate-260nw-1840845517.jpg'); /* Replace with the path to your image */
+        background-size: cover; /* Ensure the background image covers the entire container */
+        background-position: center; /* Center the background image */
+        background-repeat: no-repeat; /* Prevent the image from repeating */
+        padding: 20px; /* Optional: Add some padding if needed */
+        border-radius: 8px; /* Optional: Add rounded corners if desired */
+       opacity: 0.7;
+}
+
+#profileImage {
+    /*background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiZfk_mBRRAnMVpDjIrMbiU5DUxjWeZ5nqRQ&usqp=CAU'); /* Replace with the path to your image */
+        background-size: cover; /* Ensure the background image covers the entire container */
+        background-position: center; /* Center the background image */
+        background-repeat: no-repeat; /* Prevent the image from repeating */
+        border-radius: 100px;
+       /*opacity: 0.7;*/
+}
+
+/* Styles for each project item */
+.project {
+    background-color: #d1d6db;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 100px;
+    min-height: 400px;
+    border: 1px outset rgb(193, 191, 191);
+    border-radius: 10px;
+    box-shadow: 10px 10px 50px 15px grey;
+}
+#imag{
+    height: 400px;
+}
+
+.viewC {
+    text-align: right;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* Styles for the view section */
+.viewSection {
+    background-image: url('https://i.pinimg.com/564x/e5/e0/e5/e5e0e558ffcb4f1677c62f40fd8f823e.jpg'); /* Replace with the path to your image */
+        background-size: cover; /* Ensure the background image covers the entire container */
+        background-position: center; /* Center the background image */
+      background-repeat: no-repeat; /* Prevent the background image from repeating */
+      background-attachment: scroll; /* Make the background image fixed in place during scrolling (optional) */
+    margin-left: 10px;
+    border-radius: 10px;
+    padding-right: 10px;
+    padding-top: 20px;
+    margin-right: 10px;
+    width: 25%;
+}
+
+/* Styles for the view part */
+.viewpart {
+    min-height: 98%;
+    border-radius: 10px;
+    margin-left: 10px;
+    background-color: rgb(255 255 255 / 00%);
+  backdrop-filter: blur(10px);
+}
+
+/* Styles for view part headings */
+.viewpart h1 {
+    padding: 10px 20px;
+}
+
+/* Styles for view part lists */
+.viewpart ol {
+    padding: 20px 35px;
+}
+
+/* Styles for view part list items */
+.viewpart ol li {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+/* Media query for screens up to 1200px wide */
+@media screen and (max-width:1200px) {
+    main {
+        display: block;
+    }
+
+    .mainInfoText {
+        font-size: 1em;
+    }
+
+    .projects {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        width: 95%;
+    }
+
+    .viewSection {
+        padding-bottom: 20px;
+        margin-top: 20px;
+    }
+}
+
+/* Media query for screens up to 700px wide */
+@media screen and (max-width:700px) {
+    /* Adjust project title height for smaller screens */
+    .project h1 {
+        height: 70px;
+    }
+
+    .project:nth-of-type(4) {
+        margin-bottom: 20px;
+    }
+
+    .project {
+        width: 70%;
+    }
+
+    .projectPhoto,
+    .projectPhoto img {
+        width: 100%;
+    }
+}

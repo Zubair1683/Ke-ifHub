@@ -1,0 +1,192 @@
+
+/* Title of the page*/
+.title {
+    margin-bottom: 10px;
+}
+
+/* Style for address section*/
+.address {
+    background-color: rgb(248, 244, 238);
+    border-radius: 15px;
+    margin-left: 15%;
+    width: 45%;
+    padding: 15px 15px;
+    margin-bottom: 15px;
+}
+
+/* Style for address section's ordered list*/
+.address ol {
+    margin-bottom: 20px;
+}
+
+/* Style for address section's ordered list items*/
+.address li {
+    list-style-type: none;
+}
+#weather {
+    background-color: rgb(205, 211, 204);
+    padding: 15px 5px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/* Map of the developler adress*/
+#map {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+}
+
+/* Some social media icons*/
+.socialbar {
+    margin-left: 15%;
+}
+
+.socialmedia {
+    color: #2f3e46;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.fa.fa-facebook-f:hover {
+    color: #316ff6;
+}
+
+.fa.fa-facebook-f:active {
+    color: #316ff6;
+}
+
+.fa.fa-twitter:hover {
+    color: #1d9bf0;
+}
+
+.fa.fa-twitter:active {
+    color: #1d9bf0;
+}
+
+.fa.fa-instagram:hover {
+    color: rgb(171, 173, 45);
+}
+
+.fa.fa-instagram:active {
+    color: rgb(171, 173, 45);
+}
+
+.fa.fa-youtube:hover {
+    color: #ff0000;
+}
+
+.fa.fa-youtube:active {
+    color: #ff0000;
+}
+
+/* Style of form of contact with the developer*/
+.contactForm {
+    background-color: rgb(248, 244, 238);
+    border-radius: 15px;
+    margin-left: 15%;
+    width: 40%;
+    padding: 15px 15px;
+    margin-bottom: 15px;
+    margin-top: 30px;
+}
+
+.contactForm h1 {
+    margin-bottom: 10px;
+}
+
+.contactForm h2 {
+    margin-bottom: 20px;
+}
+
+.label {
+    display: inline-block;
+    width: 40%;
+}
+
+#name,
+#surname,
+#email,
+#phone,
+#country {
+    margin-bottom: 10px;
+    height: 35px;
+    width: 50%;
+}
+
+#Other {
+    margin-bottom: 15px;
+}
+
+input[type=submit] {
+    background-color: rgb(201, 148, 74);
+    padding: 2.5% 8%;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    border-style: none;
+    box-shadow: 5px 5px 5px rgb(168, 166, 166);
+}
+
+.radioButton {
+    margin-left: 2.5%;
+}
+
+input[type=submit]:hover {
+    background-color: rgb(192, 149, 89);
+    box-shadow: 3px 3px 3px rgb(168, 166, 166);
+}
+
+input[type=submit]:active {
+    background-color: rgb(164, 127, 74);
+    box-shadow: 1px 1px 1px rgb(139, 139, 139);
+}
+
+textarea {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    height: 100px;
+    width: 70%;
+    margin-left: 5%;
+}
+
+#requirement {
+    color: red;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding-bottom: 10px;
+}
+
+label {
+    font-weight: 600;
+}
+
+span.require {
+    color: red;
+}
+
+/* Media queries for screen size adjustments */
+@media screen and (max-width:1200px) {
+ 
+    .address {
+        width: 55%;
+    }
+
+    .contactForm {
+        width: 50%;
+    }
+
+    input[type=submit] {
+        padding: 3% 5%;
+    }
+}
+
+@media screen and (max-width:750px) {
+    .address {
+        width: 70%;
+    }
+
+    .contactForm {
+        width: 65%;
+    }
+}

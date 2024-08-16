@@ -1,0 +1,26 @@
+<% layout('layouts/boilerplate2')%>
+    <div class="container-fluid mt-4 mb-4">
+        <div class="projects1" style="background-color: #e0e1df; border-radius: 10px;">
+          <div class="project1">
+            <div class="projectTop">
+              <h1><%= data.title %></h1>
+              <div class="info">
+                <p><%= data.info %></p>
+              </div>
+            </div>
+            <div id="pPhoto">
+              <a href="/project/<%=data._id%>" class="imagebutton">
+                <img src="<%= data.imageURL %>" alt="Project-<%= data.title %>">
+              </a>
+            </div>
+          </div>
+          <div id="pagging">
+            <div id="paggingElements">
+              <button id="upButton">&#8593;</button>
+              <h2 id="projNum" value="<%= num %>"><%= num %></h2>
+              <button id="downButton" >&#8595;</button>
+    
+            </div>
+          </div>
+        </div>
+    </div>

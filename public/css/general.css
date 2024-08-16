@@ -1,0 +1,24 @@
+/* Apply basic styles to all elements */
+* {
+    font-family: sans-serif;
+}
+/* Style for the logo image in the navigation bar */
+#logoImage {
+    height: 40px;
+}
+
+#homebackground {
+    /*background-color: rgba(255, 255, 255, 0.7); /* Adjust the background color and opacity */
+    
+    /*backdrop-filter: blur(10px); /* Adjust the blur intensity as desired */
+    background-color: rgb(255 255 255 / 10%);
+      backdrop-filter: blur(10px);
+    }
+    body {
+    
+        background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9fU1aaUmpKDwFZfPMVbevm5DHuQomyyEHE7PI9ElSUrCMZLb_AasePZ4nnglX4VRFHRg&usqp=CAU'); /* Replace with the path to your image */
+        background-size: cover; /* Ensure the background image covers the entire container */
+        background-position: center; /* Center the background image */
+       /* Prevent the background image from repeating */
+      background-attachment: scroll; /* Make the background image fixed in place during scrolling (optional) */
+    }

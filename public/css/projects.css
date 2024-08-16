@@ -1,0 +1,138 @@
+
+
+/* Styles for projects container */
+.projects1 {
+    border-radius: 15px;
+    margin-left: 1%;
+    padding: 35px 15px;
+}
+
+/* Styles for individual projects */
+.project1 {
+    background-color: #8d8c8c;
+    border-radius: 15px;
+    padding: 15px 15px;
+    margin-bottom: 15px;
+    min-height: 450px;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 5px 5px 5px #2f3e46;
+}
+
+/* Styles for the top part of each project */
+.project1 .projectTop {
+    width: 68%;
+}
+
+/* Styles for project headings */
+.project1 h1 {
+    text-align: center;
+    background-color: #e1e1e0;
+    height: 13%;
+    margin-bottom: 15px;
+    padding-top: 7px;
+    border-radius: 20px;
+    color: hsl(0, 100%, 0%, 1);
+    box-shadow: 5px 5px 5px #2f3e46;
+}
+
+/* Hover styles for project headings */
+.project1 h1:hover {
+    cursor: default;
+    color: hsl(0, 100%, 0%, 0.7);
+}
+
+/* Styles for project information */
+.project1 .info {
+    background-color: #e1e1e0;
+    height: 82.5%;
+    border-radius: 10px;
+    padding: 20px 20px;
+    box-shadow: 5px 5px 5px #2f3e46;
+    line-height: 30px;
+    overflow: auto;
+    font-size: 18px;
+}
+
+/* Styles for paragraphs inside project information */
+.project1 .info p {
+    margin-bottom: 10px;
+}
+
+/* Styles for project photos */
+.project1 #pPhoto img {
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+}
+
+/* Styles for the photo container in projects */
+.project1 #pPhoto {
+    width: 30%;
+    margin-top: 60px;
+    box-shadow: 10px 10px 10px #2f3e46;
+    border-radius: 10px;
+}
+
+/* Styles for the up button */
+#upButton {
+    width: 40px; 
+    height: 40px; 
+    font-size: 30px; 
+    color: #d1d4cf; 
+    background-color: #707070;
+}
+
+/* Styles for the down button */
+#downButton {
+    width: 40px; 
+    height: 40px; 
+    font-size: 30px; 
+    color: #d1d4cf; 
+    background-color: #707070;
+}
+
+/* Styles for the down pagging */
+#pagging{
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+}
+
+/* Styles for the paggingElements */
+#paggingElements{
+    display: flex; 
+    width: 15%; 
+    justify-content: space-between;
+}
+
+/* Media query for screens up to 750px wide */
+@media screen and (max-width:750px) {
+    .project1 {
+        height: 300px;
+    }
+
+    .project1 h1 {
+        font-size: 25px;
+        padding-top: 3px;
+    }
+    .project1 .info {
+        line-height: 20px;
+    }
+    #paggingElements{
+        width: 30%; 
+    }
+}
+
+/* Media query for screens up to 500px wide */
+@media screen and (max-width:500px) {
+    .project1 {
+        height: 250px;
+    }
+
+    .project1 h1 {
+        font-size: 20px;
+        color: #464646;
+    }
+    
+}

@@ -1,0 +1,95 @@
+body{
+    background-color: hsla(0, 2%, 22%, 0.741);
+}
+h1{
+    text-align: center;
+    margin-top: 5px;
+    color: aliceblue;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.table{
+    background-color: hsla(0, 6%, 17%, 0.87);
+    height: 600px;
+    width: 500px;
+    border-style: outset;
+    border-width: 5px;
+    border-radius: 10px;
+    border-color: hsl(0, 0%, 48%);
+    margin: auto;
+    margin-top: 30px;
+    box-shadow: 10px 5px 30px rgb(0, 0, 0);
+    padding: 15px;
+    background-image: url('https://t4.ftcdn.net/jpg/02/16/47/33/360_F_216473351_FCLq1pZQOBFrgcyPBphKvBd8Z5wjD1dI.jpg'); 
+background-repeat: no-repeat; 
+background-size: cover; 
+background-position: center;
+}
+.t1{
+    background-color: hsl(0, 5%, 37%);
+    border-radius: 10px;
+    border-style: solid;
+    border-color: rgb(141, 134, 134);
+    border-width: 3px;
+    font-size: 20px;
+    text-align: center;
+}
+.t1:hover{
+    background-color: hsla(0, 5%, 37%, 0.953);
+    border-color: hsla(0, 3%, 54%, 0.482);
+}
+.t2{
+    color: aliceblue;
+    display: inline;
+    text-align: center;
+    position: relative;
+    left: 120px;
+}
+.t3{
+    text-align: center;
+    color: aliceblue;
+}
+.button1{
+    height: 40px;
+    width: 120px;
+    background-color: rgb(41, 40, 38);
+    color: aliceblue;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.button1:hover{
+    background-color: rgb(65, 65, 63);
+}
+.button{
+    margin-left: 25px;
+    margin-top: 30px;
+    width: 450px;
+    height: 50px;
+    border-radius: 10px;
+    background-color: orange;
+    font-size: 30px;
+    cursor: pointer;
+}
+.button:hover{
+    background-color: hsla(39, 100%, 50%, 0.703);
+    font-weight: bold;
+}
+#name{
+    width: 200px;
+    height: 40px;
+    margin: 10px;
+    margin-left: 20px;
+}
+#email{
+    width: 400px;
+    height: 40px;
+    margin: 20px;
+    margin-left: 40px;
+}
+#password{
+    width: 400px;
+    height: 40px;
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-left: 40px;
+}

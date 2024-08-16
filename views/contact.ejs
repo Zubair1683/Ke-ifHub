@@ -1,0 +1,74 @@
+<% layout('./layouts/boilerplate2')%>
+  <div class="container mb-4">
+    <div class="row mt-4 mb-4">
+      <div class=" col-md-8 col-10 offset-1 pt-2" style="background-color: #e0e1df; border-radius: 10px;">
+        <h1 class="title"><%= currentUser.username %></h1>
+      <ol>
+        <li>Ankara Yıldırım Beyazıt Üniversitesi 15 Temmuz Şehitleri Yerleşkesi, 5 150. Sok. & Takdir Caddesi Ayvalı
+          Mahallesi Etlik, 06010 Keçiören/Ankara</li>
+        <li>Email: liam.domhnaill@example.com</li>
+        <li>Phone: 0 (555) 511-1111</li>
+      </ol>
+      <div id="weather">
+
+      </div>
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2571.1902411415267!2d32.81544994490578!3d39.97095745145361!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14d34c029ec9701b%3A0xfb0b0a3bf440a10a!2zQW5rYXJhIFnEsWxkxLFyxLFtIEJleWF6xLF0IMOcbml2ZXJzaXRlc2kgMTUgVGVtbXV6IMWeZWhpdGxlcmkgWWVybGXFn2tlc2k!5e0!3m2!1str!2str!4v1710175164616!5m2!1str!2str"
+        id="map"></iframe>
+    </div>
+  </div>
+
+  <div class="row mt-4 mb-4">
+    <div class="col-sm-7 offset-1 pt-2" style="background-color: #eaebe9; border-radius: 10px;">
+      <h1>Contact us</h1>
+      <h2>Fill the below form</h2>
+      <p id="requirement">* Denotes Required Field</p>
+
+      <form accept="" id="contactForm">
+
+        <label for="name" class="label">Name:</label>
+        <input type="text" id="name" placeholder="Zubair" maxlength="15" required><span class="require">*</span><br>
+
+        <label for="surname" class="label">Surname:</label>
+        <input type="text" id="surname" placeholder="Rahimi" maxlength="15" required><span class="require">*</span><br>
+
+        <label for="email" class="label">Email:</label>
+        <input type="email" id="email" placeholder="zubairrahimi@example.com" required><span
+          class="require">*</span><br>
+
+
+        <label for="phone" class="label">Phone Number:</label>
+        <input type="tel" id="phone" placeholder="0-555-555-5555" pattern="0-[0-9]{3}-[0-9]{3}-[0-9]{4}"
+          maxlength="14"><br>
+
+        <label for="country" class="label">Country:</label>
+        <input id="country" type="text" required><span class="require">*</span><br>
+
+        <label for="title">Gender:</label>
+
+        <label for="Male" id="maleLabel" class="radioButton">Male</label>
+        <input type="radio" id="Male" value="Male" name="Gender">
+        <label for="Female" id="femaleLabel" class="radioButton">Female</label>
+        <input type="radio" id="Female" value="Female" name="Gender">
+        <label for="Other" id="otherLabel" class="radioButton">Other</label>
+        <input type="radio" id="Other" value="Other" name="Gender"><br>
+
+        <label for="comment">Write your question or recommendation:</label><br>
+        <textarea id="comment" placeholder="Write your question \ recommendation..." maxlength="200"
+          required></textarea>
+        <span class="require">*</span><br>
+        <input type="submit">
+
+      </form>
+    </div>
+  </div>
+
+  <div class="row mt-4 mb-4">
+    <div class="col-4 offset-1">
+      <a href="#" class="socialmedia"><i class="fa fa-facebook-f"></i></a>
+      <a href="#" class="socialmedia"><i class="fa fa-twitter"></i></a>
+      <a href="#" class="socialmedia"><i class="fa fa-instagram"></i></a>
+      <a href="#" class="socialmedia"><i class="fa fa-youtube"></i></a>
+    </div>
+  </div>
+  </div>
