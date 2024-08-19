@@ -1,25 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YelpCamp</title>
-
-   
-    <script crossorigin="anonymous" src="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.umd.min.js"></script>
-    <link crossorigin="anonymous" href="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.css" rel="stylesheet">
-
-
-</head>
- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
-        integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+<%- include('../partials/head')%>
 
 <body class="d-flex flex-column vh-100">
-    <%- include('../partials/navbar')%>
-    <main class="container mt-5">
-        <%- include('../partials/flash')%>
+    <%- include('../partials/navbar2')%>
+    <%- include('../partials/flash')%>
+    <main class="container-fluid mt-5" style="padding: 0px;">
+        
         <%- body %>
     </main>
     <%- include('../partials/footer')%>

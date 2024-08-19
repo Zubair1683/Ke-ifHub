@@ -10,25 +10,25 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-link" href="/home" id="navlink">Home</a>
-                <a class="nav-link" href="/campgrounds" id="navlink">Show Campgrounds</a>
+                <a class="nav-link" href="/campgrounds" id="navlink">Campgrounds</a>
             </div>
             <% if(currentUser){ %>
                 
                 <div class="navbar-nav ml-auto">
                     <a class="nav-link" href="/prof" id="navlink">
-                        <%= currentUser.username %>
+                        Profile
                             <% if(currentUser.image){%>
                                 <img src="<%= currentUser.image.url %>" id="profileImage"  style="height: 40px; width: 40px;">
                                 <%}else{%>
                                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiZfk_mBRRAnMVpDjIrMbiU5DUxjWeZ5nqRQ&usqp=CAU" id="profileImage"  style="height: 40px; width: 40px;">
                                 <%}%>
                        </a>
-                    <a class="nav-link" href="/logOut" id="navlink" style="margin-top: 6px;">Log out</a>
+                    <a class="nav-link" href="/logout" id="navlink" style="margin-top: 6px;">Log out</a>
                 </div>
                 <% } else { %>
                     <div class="navbar-nav ml-auto">
-                        <a class="nav-link" href="/logIn" id="navlink">Login</a>
-                        <a class="nav-link" href="/signUp" id="navlink">Sign Up</a>
+                        <a class="nav-link" href="/login" id="navlink">Login</a>
+                        <a class="nav-link" href="/register" id="navlink">Sign Up</a>
                     </div>
                     <% } %>
         </div>

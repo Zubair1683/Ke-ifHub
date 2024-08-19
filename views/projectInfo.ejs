@@ -58,7 +58,7 @@
               <input type="submit" class="bg-info">
             </form>
             <% } else {%>
-              <form action="/project/<%=accountID%>/<%=project._id%>/comment" id="addComment" method="POST">
+              <form action="/project/comment/<%=accountID%>/<%=project._id%>" id="addComment" method="POST">
                 <textarea class="comment" id="comment" name="text" placeholder="Type your comment..." rows="5" cols="50"
                   maxlength="500" required></textarea><br>
                 <input type="submit" class="bg-info">

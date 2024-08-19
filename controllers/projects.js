@@ -11,7 +11,7 @@ module.exports.addProject = async (req, res, next) => {
         { new: true }
     );
     req.flash('success', 'Successfully made a new project!');
-    res.redirect(`/myAccount`);
+    res.redirect(`/prof`);
 }
 
 module.exports.searchProject = async (req, res, next) => {
@@ -55,11 +55,13 @@ module.exports.searchProject = async (req, res, next) => {
         
         
     }
-    console.log(project.comments)
     
+    console.log(project.GeneralviewCounter)
     project.GeneralviewCounter += 1;
+    
     await account.save();
     const projects = account.projects;
+
  // Return the updated project information to the client
  res.render('projectInfo', { project, webTitle: `${project.title}`, accountID, projects });
    

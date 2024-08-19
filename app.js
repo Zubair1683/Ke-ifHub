@@ -2,7 +2,6 @@ if (process.env.NODE_ENV !== "production") {
     require('dotenv').config();
 }
 
-
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -16,16 +15,18 @@ const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 const Account = require('./models/accounts');
 
-//const userRoutes2 = require('./routes/user');
-const projectRoutes = require('./routes/projects');
-const commentRoutes = require('./routes/comment');
-const userRoutes = require('./routes/user');
+
+const userRoutes = require('./routes/users');
 const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
+const projectRoutes = require('./routes/projects');
+const commentRoutes = require('./routes/comment');
 
-mongoose.connect('mongodb://localhost:27017/yelp-camp', {
+mongoose.connect('mongodb://localhost:27017/NewProject', {
     useNewUrlParser: true,
+    useCreateIndex: true,
     useUnifiedTopology: true,
+    useFindAndModify: false
 });
 
 const db = mongoose.connection;
@@ -65,7 +66,6 @@ passport.use(new LocalStrategy(Account.authenticate()));
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
-
 app.use((req, res, next) => {
     //console.log(req.session)
     res.locals.currentUser = req.user;
@@ -74,11 +74,12 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use('/', projectRoutes);
-app.use('/', commentRoutes);
+
 app.use('/', userRoutes);
 app.use('/campgrounds', campgroundRoutes)
 app.use('/campgrounds/:id/reviews', reviewRoutes)
+app.use('/', projectRoutes);
+app.use('/', commentRoutes);
 
 
 app.all('*', (req, res, next) => {

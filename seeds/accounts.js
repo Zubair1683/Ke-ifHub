@@ -1,20 +1,17 @@
 const mongoose = require('mongoose');
 const Account = require('../models/accounts');
-const campgrounds = require('./index');
+//const campgrounds = require('./index');
+const Campground = require('../models/campground');
 
-mongoose.connect('mongodb://localhost:27017/yelp-camp', {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true
-});
-
-const db = mongoose.connection;
-
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", () => {
-    console.log("Database connected");
-});
-
+mongoose.connect('mongodb://localhost:27017/NewProject', { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log("MONGO CONNECTION OPEN!!!");
+    })
+    .catch(err => {
+        console.log("OH NO MONGO CONNECTION ERROR!!!!");
+        console.log(err);
+    });
+    
     const ImageSchema1 = new mongoose.Schema({
         url: String,
         filename: String
@@ -87,7 +84,7 @@ const projectsDatas = [
 const accountsDB = async () => {
     try {
         await Account.deleteMany({});
-
+        const campgrounds = await Campground.find({});
        // const hash = await createHash('securepassword');
 const password = 'securepassword';
         const sampleUser = {

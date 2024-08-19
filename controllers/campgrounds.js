@@ -2,26 +2,29 @@ const Campground = require('../models/campground');
 const maptilerClient = require("@maptiler/client");
 maptilerClient.config.apiKey = process.env.MAPTILER_API_KEY;
 const { cloudinary } = require("../cloudinary");
+const Account = require('../models/accounts');
 
 
 module.exports.index = async (req, res) => {
     const campgrounds = await Campground.find({}).populate('popupText');
-   // console.log(campgrounds[0])
-    res.render('campgrounds/index', { campgrounds })
+    res.render('campgrounds/index', { campgrounds, webTitle: "Campgrounds"})
 }
 
 module.exports.renderNewForm = (req, res) => {
-    res.render('campgrounds/new');
+    res.render('campgrounds/new', {webTitle: "Campgrounds"});
 }
 
 module.exports.createCampground = async (req, res, next) => {
     const geoData = await maptilerClient.geocoding.forward(req.body.campground.location, { limit: 1 });
-const campground = new Campground(req.body.campground);
-campground.geometry = geoData.features[0].geometry;
+    const campground = new Campground(req.body.campground);
+    const account = await Account.findById(req.user._id);
+   
+    campground.geometry = geoData.features[0].geometry;
     campground.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
     campground.author = req.user._id;
+    account.campgrounds.push(campground);
     await campground.save();
-    //console.log(campground);
+    await account.save();
     req.flash('success', 'Successfully made a new campground!');
     res.redirect(`/campgrounds/${campground._id}`)
 }
@@ -33,12 +36,12 @@ module.exports.showCampground = async (req, res,) => {
             path: 'author'
         }
     }).populate('author');
-    //console.log(campground)
     if (!campground) {
         req.flash('error', 'Cannot find that campground!');
         return res.redirect('/campgrounds');
     }
-    res.render('campgrounds/show', { campground });
+   // console.log(campground)
+    res.render('campgrounds/show', { campground, webTitle: "campground.title" });
 }
 
 module.exports.renderEditForm = async (req, res) => {
@@ -48,12 +51,12 @@ module.exports.renderEditForm = async (req, res) => {
         req.flash('error', 'Cannot find that campground!');
         return res.redirect('/campgrounds');
     }
-    res.render('campgrounds/edit', { campground });
+    res.render('campgrounds/edit', { campground, webTitle: "campground.title"  });
 }
 
 module.exports.updateCampground = async (req, res) => {
     const { id } = req.params;
-    console.log(req.body);
+   // console.log(req.body);
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
     const geoData = await maptilerClient.geocoding.forward(req.body.campground.location, { limit: 1 });
 campground.geometry = geoData.features[0].geometry;
