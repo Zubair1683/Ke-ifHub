@@ -19,6 +19,26 @@ const opts = { toJSON: { virtuals: true } };
 const CampgroundSchema = new Schema({
     title: String,
     images: [ImageSchema],
+    info: {
+        type: String,
+        required: true
+    },
+    shortInfo: {
+        type: String,
+        required: true
+    },
+    viewCounter: {
+        type: Number,
+        default: 0
+    },
+    generalViewCounter: {
+        type: Number,
+        default: 0
+    },
+    viewMembers: [{
+        username: String,
+        id: String
+    }],
     geometry: {
         type: {
             type: String,
@@ -33,16 +53,18 @@ const CampgroundSchema = new Schema({
     price: Number,
     description: String,
     location: String,
-    author: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    },
+    author: String,
     reviews: [
         {
             type: Schema.Types.ObjectId,
             ref: 'Review'
         }
-    ]
+    ],
+    date: {
+        type: Date,
+        default: Date.now
+    },
+    id: String
 }, opts);
 
 

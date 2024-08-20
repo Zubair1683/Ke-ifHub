@@ -13,7 +13,7 @@ module.exports.signUp = async (req, res, next) => {
         req.login(registeredUser, err => {
             if (err) return next(err);
             req.flash('success', 'Welcome to Yelp Camp!');
-            console.log(registeredUser)
+            //console.log(registeredUser)
             res.redirect(`/home`)
         })
     } catch (e) {
@@ -48,19 +48,29 @@ module.exports.logIn = (req, res) => {
 
 module.exports.home = async (req, res, next) => {
     const accounts = await Account.find({});
+    console.log(123)
     //console.log(accounts[0])
+    let orderedAll = [];
     let orderedProjects = [];
     let orderedtopProjects = [];
     let orderedTrendProjects = [];
     let orderedRecProjects = [];
     // Step 1: Flatten the nested structure
+    //const campground = account
+    const campground = accounts[0].campgrounds[0].populate();
+    console.log("dsad")
+    console.log(campground)
     for (const account of accounts) {
+        
         for (const project of account.projects) {
+            orderedAll.push({ project, author: account.username, accountID: account._id });
             orderedProjects.push({ project, author: account.username, accountID: account._id });
             orderedtopProjects.push({ project, author: account.username, accountID: account._id });
             orderedTrendProjects.push({ project, author: account.username, accountID: account._id });
             orderedRecProjects.push({ project, author: account.username, accountID: account._id });
         }
+        
+
     }
 
     // Step 2: Sort the flattened array based on a criterion

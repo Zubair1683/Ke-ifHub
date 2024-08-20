@@ -3,6 +3,7 @@ const maptilerClient = require("@maptiler/client");
 maptilerClient.config.apiKey = process.env.MAPTILER_API_KEY;
 const { cloudinary } = require("../cloudinary");
 const Account = require('../models/accounts');
+const Review = require('../models/review');
 
 
 module.exports.index = async (req, res) => {
@@ -21,7 +22,8 @@ module.exports.createCampground = async (req, res, next) => {
    
     campground.geometry = geoData.features[0].geometry;
     campground.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
-    campground.author = req.user._id;
+    campground.author = req.user.username;
+    campground.id = account._id;
     account.campgrounds.push(campground);
     await campground.save();
     await account.save();
@@ -30,18 +32,14 @@ module.exports.createCampground = async (req, res, next) => {
 }
 
 module.exports.showCampground = async (req, res,) => {
-    const campground = await Campground.findById(req.params.id).populate({
-        path: 'reviews',
-        populate: {
-            path: 'author'
-        }
-    }).populate('author');
+    const campground = await Campground.findById(req.params.id).populate();
+    const reviews = await Review.find({ id: campground.id });
     if (!campground) {
         req.flash('error', 'Cannot find that campground!');
         return res.redirect('/campgrounds');
     }
    // console.log(campground)
-    res.render('campgrounds/show', { campground, webTitle: "campground.title" });
+    res.render('campgrounds/show', { campground, reviews, webTitle: "campground.title" });
 }
 
 module.exports.renderEditForm = async (req, res) => {

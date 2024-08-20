@@ -17,33 +17,62 @@
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
       <ol class="carousel-indicators">
         <% for (let j=0; j < orderedTrendProjects.length; j++) { %>
+          <% if(orderedTrendProjects[j].campground) {%>
+            <% if (orderedTrendProjects[j].campground.images) { %>
+              <li data-target="#carouselExampleIndicators" data-slide-to="<%= j %>"
+                class="<%= j === 0 ? 'active' : '' %>"></li>
+              <% } %>
+            <% } else { %>
           <% if (orderedTrendProjects[j].project.images) { %>
             <li data-target="#carouselExampleIndicators" data-slide-to="<%= j %>"
               class="<%= j === 0 ? 'active' : '' %>"></li>
             <% } %>
               <% } %>
+              <% } %>
       </ol>
       <div class="carousel-inner">
         <% for (let j=0; j < orderedTrendProjects.length; j++) { %>
-          <% if (orderedTrendProjects[j].project.images) { %>
-            <% let linkUrl=currentUser ?
-              `/project/${currentUser._id}/${orderedTrendProjects[j].accountID}/${orderedTrendProjects[j].project._id}`
-              : `/project/${orderedTrendProjects[j].accountID}/${orderedTrendProjects[j].project._id}`; %>
-              <div class="carousel-item <%= j === 0 ? 'active' : '' %>">
-                <a href="<%= linkUrl %>">
-                  <img src="<%= orderedTrendProjects[j].project.images[0].url %>" class="d-block w-100"
-                    alt="<%= orderedTrendProjects[j].project.title %>'s Image" style="height: 400px;">
-                </a>
-                <div class="carousel-caption custom-caption">
-                  <h5>
-                    <%= orderedTrendProjects[j].project.title %>
-                  </h5>
-                  <h4>By: <%= orderedTrendProjects[j].author %>
-                  </h4>
+          <% if(orderedTrendProjects[j].campground) {%>
+            <% if (orderedTrendProjects[j].campground.images) { %>
+              <% let linkUrl=currentUser ?
+                `/project/${currentUser._id}/${orderedTrendProjects[j].accountID}/${orderedTrendProjects[j].campground._id}`
+                : `/project/${orderedTrendProjects[j].accountID}/${orderedTrendProjects[j].campground._id}`; %>
+                <div class="carousel-item <%= j === 0 ? 'active' : '' %>">
+                  <a href="<%= linkUrl %>">
+                    <img src="<%= orderedTrendProjects[j].campground.images[0].url %>" class="d-block w-100"
+                      alt="<%= orderedTrendProjects[j].campground.title %>'s Image" style="height: 400px;">
+                  </a>
+                  <div class="carousel-caption custom-caption">
+                    <h5>
+                      <%= orderedTrendProjects[j].campground.title %>
+                    </h5>
+                    <h4>By: <%= orderedTrendProjects[j].author %>
+                    </h4>
+                  </div>
                 </div>
-              </div>
-              <% } %>
                 <% } %>
+            <% } else { %>
+                <% if (orderedTrendProjects[j].project.images) { %>
+                  <% let linkUrl=currentUser ?
+                    `/project/${currentUser._id}/${orderedTrendProjects[j].accountID}/${orderedTrendProjects[j].project._id}`
+                    : `/project/${orderedTrendProjects[j].accountID}/${orderedTrendProjects[j].project._id}`; %>
+                    <div class="carousel-item <%= j === 0 ? 'active' : '' %>">
+                      <a href="<%= linkUrl %>">
+                        <img src="<%= orderedTrendProjects[j].project.images[0].url %>" class="d-block w-100"
+                          alt="<%= orderedTrendProjects[j].project.title %>'s Image" style="height: 400px;">
+                      </a>
+                      <div class="carousel-caption custom-caption">
+                        <h5>
+                          <%= orderedTrendProjects[j].project.title %>
+                        </h5>
+                        <h4>By: <%= orderedTrendProjects[j].author %>
+                        </h4>
+                      </div>
+                    </div>
+                    <% } %>
+                      <% } %>
+              <% } %>
+          
       </div>
       <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -60,9 +89,12 @@
   <div class="container">
     <main id="homebackground">
       <div class="projects">
-        <% if(orderedProjects) {%>
-          <% for(let project of orderedProjects) {%>
-            <h2>"<%= project.project.title %>" Project is published by <%= project.author %></h2>
+        <% if(orderedAll) {%>
+          <% for(let project of orderedAll) {%>
+            <% if(project.campground) {%>
+              <% project.project = project.campground%>
+              <% } %>
+            <h2>"<%= project.project.title %>" is published by <%= project.author %></h2>
             <div class="project">
               <div class="card rounded">
                 <div class="row">
