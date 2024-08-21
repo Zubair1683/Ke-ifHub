@@ -29,7 +29,7 @@ module.exports.renderLogin = (req, res) => {
 
 module.exports.login = (req, res) => {
     req.flash('success', 'welcome back!');
-    console.log(redirectUrl)
+   // console.log(redirectUrl)
     if (!redirectUrl) {
         res.redirect(`/home`);
     }
@@ -97,7 +97,20 @@ module.exports.home = async (req, res, next) => {
     });
 
     // Step 2: Sort the projects based on the average rating
-    orderedProjects.sort((a, b) => new Date(b.project.date) - new Date(a.project.date));
+    orderedAll.sort((a, b) => {
+        if(a.campground && b.project){
+            new Date(b.project.date) - new Date(a.campground.date)
+        }
+        else if(b.campground && a.project){
+            new Date(b.campground.date) - new Date(a.project.date)
+        }
+        else if(a.campground && b.campground) {
+            new Date(b.campground.date) - new Date(a.campground.date)
+        }
+        else{
+            new Date(b.project.date) - new Date(a.project.date)
+        }
+ });
     orderedtopProjects.sort((a, b) => b.project.viewCounter - a.project.viewCounter);
     orderedTrendProjects.sort((a, b) => {
             if(a.campground && b.project){
@@ -115,18 +128,60 @@ module.exports.home = async (req, res, next) => {
      } ).reverse();
    
     orderedRecProjects.sort((a, b) => b.averageRating - a.averageRating).reverse();
-    orderedAll.reverse();
 //console.log(orderedRecProjects)
     orderedTrendProjects = filter(orderedTrendProjects);
     orderedRecProjects = filter(orderedRecProjects);
     orderedtopProjects = filter(orderedtopProjects);
    // console.log(orderedTrendProjects.length)
+
     res.render(`home`, { orderedtopProjects, orderedAll, orderedTrendProjects, orderedRecProjects, accounts, webTitle: "Home" });
 }
 
 module.exports.addProject = async (req, res, next) => {
     res.render('addProject', { webtitle: "addProject" })
 }
+
+module.exports.search = async (req, res, next) => {
+    // const { id } = req.params;
+     const searched = req.body.search.toLowerCase();
+     const accounts = await Account.find({});
+     const campgrounds = await Campground.find({}).populate('popupText');
+     let ordered = [];
+    
+     // Step 1: Flatten the nested structure
+     for (const account of accounts) {
+         for (const project of account.projects) {
+             let myArray = project.title.toLowerCase().split(" ");
+             if(project.title.toLowerCase() == searched || myArray.includes(searched)) ordered.push({ project, author: account.username, accountID: account._id });
+ 
+         }
+         for (const campground of campgrounds) {
+            let myArray = campground.title.toLowerCase().split(" ");
+            const account1 = await Account.findById(campground.id);
+            if(campground.title.toLowerCase() == searched || myArray.includes(searched)) ordered.push({ campground, author: account1.username, accountID: account1._id });
+    
+    }
+     }
+     ordered.sort((a, b) => {
+        if(a.campground && b.project){
+            new Date(b.project.date) - new Date(a.campground.date)
+        }
+        else if(b.campground && a.project){
+            new Date(b.campground.date) - new Date(a.project.date)
+        }
+        else if(a.campground && b.campground) {
+            new Date(b.campground.date) - new Date(a.campground.date)
+        }
+        else{
+            new Date(b.project.date) - new Date(a.project.date)
+        }
+ });
+   let orderedtopProjects = [];
+    let orderedTrendProjects = [];
+    let orderedRecProjects = [];
+     ordered = ordered.length > 0 ? ordered : null;
+     res.render(`home`, { orderedtopProjects: ordered, orderedAll: ordered, orderedTrendProjects: ordered, orderedRecProjects: ordered, accounts, webTitle: "Home"})
+ }
 
 module.exports.logout = (req, res) => {
     req.logout();

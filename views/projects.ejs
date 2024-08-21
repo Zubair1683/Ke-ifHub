@@ -1,26 +1,229 @@
-<% layout('layouts/boilerplate')%>
-    <div class="container-fluid mt-4 mb-4">
-        <div class="projects1" style="background-color: #e0e1df; border-radius: 10px;">
-          <div class="project1">
-            <div class="projectTop">
-              <h1><%= data.title %></h1>
-              <div class="info">
-                <p><%= data.info %></p>
+<% layout('./layouts/boilerplate2')%>
+  <div class="container-fluid bg-secondary pb-5 pt-5" id="searchbackground">
+
+    <div class="container-fluid text-white">
+      <h1>Welcome, be ready to discover your Journey</h1> <hr>
+    </div><br>
+    <div class="container">
+      <form action="/searchProject" method="POST" class="form-inline d-flex flex-row">
+        <input class="form-control mr-sm-2" type="text" id="search" placeholder="Search" name="search">
+        <button class="btn btn-dark my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="container mt-5 mb-5 pb-2 shadow">
+    <h1>Top Trending</h1>
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <% for (let j=0; j < orderedTrendProjects.length; j++) { %>
+          <% if(orderedTrendProjects[j].campground) {%>
+              <li data-target="#carouselExampleIndicators" data-slide-to="<%= j %>"
+                class="<%= j === 0 ? 'active' : '' %>"></li>
+              <% } %>
+          <% if (orderedTrendProjects[j].project.images) { %>
+            <li data-target="#carouselExampleIndicators" data-slide-to="<%= j %>"
+              class="<%= j === 0 ? 'active' : '' %>"></li>
+            <% } %>
+              <% } %>
+      </ol>
+      <div class="carousel-inner">
+        <% for (let j=0; j < orderedTrendProjects.length; j++) { %>
+                <% if (orderedTrendProjects[j].project.images) { %>
+                  <% let linkUrl=currentUser ?
+                    `/project/${currentUser._id}/${orderedTrendProjects[j].accountID}/${orderedTrendProjects[j].project._id}`
+                    : `/project/${orderedTrendProjects[j].accountID}/${orderedTrendProjects[j].project._id}`; %>
+                    <div class="carousel-item <%= j === 0 ? 'active' : '' %>">
+                      <a href="<%= linkUrl %>">
+                        <img src="<%= orderedTrendProjects[j].project.images[0].url %>" class="d-block w-100"
+                          alt="<%= orderedTrendProjects[j].project.title %>'s Image" style="height: 400px;">
+                      </a>
+                      <div class="carousel-caption custom-caption">
+                        <h5>
+                          <%= orderedTrendProjects[j].project.title %>
+                        </h5>
+                        <h4>By: <%= orderedTrendProjects[j].author %>
+                        </h4>
+                      </div>
+                    </div>
+                    <% } %>
+              <% } %>
+          
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+  </div>
+
+
+  <div class="container">
+    <main id="homebackground">
+      <div class="projects">
+        <% if(orderedProjects) {%>
+          <% for(let project of orderedProjects) {%>
+            <h2>"<%= project.project.title %>" is published by <%= project.author %></h2>
+            <div class="project">
+              <div class="card rounded">
+                <div class="row">
+
+                  
+                    <% if(currentUser) {%>
+                      <div class="col" id="imag">
+                      <a href="/project/<%= currentUser._id %>/<%=project.accountID%>/<%=project.project._id%>">
+                        <img src="<%= project.project.images[0].url%>" class="d-block w-100"
+                          alt="<%=project.project.title%>'s Image" style="height: 400px;">
+                      </a>
+                  </div>
+                  <div class="col-4">
+                    <div class="card-body" style="height: 90%">
+                      <a href="/project/<%= currentUser._id %>/<%=project.accountID%>/<%=project.project._id%>"
+                        style="text-decoration: none; color: black;">
+                        <h5 class="card-title" style="display: inline; cursor: pointer">
+                          <%= project.project.title %>
+                        </h5>
+
+                      </a>
+                      <li class="text-muted">By: <%= project.author %>
+                      </li>
+                      <li class="text-muted">
+                        <span>Published: </span>
+                        <% const currentDate=new Date(); const commentDate=new Date(project.project.date); const
+                          diffMs=currentDate - commentDate; // Difference in milliseconds const
+                          diffDays=Math.floor(diffMs / (1000 * 60 * 60 * 24)); const diffHours=Math.floor((diffMs %
+                          (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); const diffMinutes=Math.floor((diffMs % (1000 *
+                          60 * 60)) / (1000 * 60)); if (diffDays> 0) {
+                          %><%= diffDays %> days ago<% } else if (diffHours> 0) {
+                              %><%= diffHours %> hours ago<% } else { %>
+                                  <%= diffMinutes %> minutes ago<% } %>
+                      </li>
+                      <hr>
+                      
+                        <p class="card-text"><span class="text-muted">Info: </span>
+                          <%=project.project.shortInfo%>
+                        </p>
+                        
+                      </div>
+                      <div class="card-footer text-muted w-100 mt-auto">
+                        <p style="margin: 0; font-size: smaller;">
+                          <%=project.project.viewCounter%> view
+                        </p>
+
+                      </div>
+                    </div>
+                      <% } else {%>
+                        <div class="col" id="imag">
+                        <a href="/project/<%=project.accountID%>/<%=project.project._id%>">
+                          <img src="<%= project.project.images[0].url%>" class="d-block w-100"
+                            alt="<%=project.project.title%>'s Image" style="height: 400px; border: 2px inset #000; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);">
+                        </a>
+                    </div>
+                    <div class="col-4">
+                      <div class="card-body" style="height: 90%;">
+                        <a href="/project/<%=project.accountID%>/<%=project.project._id%>"
+                          style="text-decoration: none; color: black;">
+                          <h5 class="card-title" style="display: inline; cursor: pointer">
+                            <%= project.project.title %>
+                          </h5>
+                        </a>
+                        
+                        <li class="text-muted">By: <%= project.author %>
+                        </li>
+                        <li class="text-muted">
+                          <span>Published: </span>
+                          <% const currentDate=new Date(); const commentDate=new Date(project.project.date); const
+                            diffMs=currentDate - commentDate; // Difference in milliseconds const
+                            diffDays=Math.floor(diffMs / (1000 * 60 * 60 * 24)); const diffHours=Math.floor((diffMs %
+                            (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); const diffMinutes=Math.floor((diffMs % (1000 *
+                            60 * 60)) / (1000 * 60)); if (diffDays> 0) {
+                            %><%= diffDays %> days ago<% } else if (diffHours> 0) {
+                                %><%= diffHours %> hours ago<% } else { %>
+                                    <%= diffMinutes %> minutes ago<% } %>
+                        </li>
+                        <hr>
+                        
+                          <p class="card-text"><span class="text-muted">Info: </span>
+                            <%=project.project.shortInfo%>
+                          </p>
+                      </div>
+                      <div class="card-footer text-muted w-100 mt-auto">
+                        <p style="margin: 0; font-size: smaller;">
+                          <%=project.project.viewCounter%> view
+                        </p>
+
+                      </div>
+                      
+                    </div>
+                    <% }%>
+                  </div>
+                </div>
+              </div>
+              <% }%>
+                <% } else {%>
+                  <h1>No results found.</h1>
+                  <% }%>
+            </div>
+
+            <div class="viewSection">
+              <div style="margin-bottom: 80px;">
+                <h2 style="font-size: 1.5em; text-align: center; font-weight: bold;">Most reccommended</h2><br>
+                <ol id="topList">
+
+                  <% for(let i=0; i<orderedRecProjects.length; i++) {%>
+                    <% let project=orderedRecProjects[i];%>
+                      <% if(!currentUser) {%>
+                        <li><a href="/project/<%=project.accountID%>/<%=project.project._id%>"
+                            style="text-decoration: none; color: black;">
+                            <h5 class="card-title">
+                              <%= project.project.title %>
+                            </h5>
+                          </a></li>
+                          <hr>
+                          <% } else {%>
+                        <li><a href="/project/<%= currentUser._id %>/<%=project.accountID%>/<%=project.project._id%>"
+                            style="text-decoration: none; color: black;">
+                            <h5 class="card-title">
+                              <%= project.project.title %>
+                            </h5>
+                          </a></li>
+                          <hr>
+                          <% }%>
+
+                            <% }%>
+                </ol>
+              </div>
+              <div class="">
+                <h1 style="font-size: 1.5em; text-align: center; font-weight: bold;">Most Viewed</h1><br>
+                <ol id="topList">
+
+                  <% for(let i=0; i<orderedtopProjects.length; i++) {%>
+                    <% let project=orderedtopProjects[i];%>
+                      <% if(!currentUser) {%>
+                        <li><a href="/project/<%=project.accountID%>/<%=project.project._id%>"
+                            style="text-decoration: none; color: black;">
+                            <h5 class="card-title">
+                              <%= project.project.title %>
+                            </h5>
+                          </a>
+                          <hr>
+                          <% } else {%>
+                        <li><a href="/project/<%= currentUser._id %>/<%=project.accountID%>/<%=project.project._id%>"
+                            style="text-decoration: none; color: black;">
+                            <h5 class="card-title">
+                              <%= project.project.title %>
+                            </h5>
+                          </a>
+                          <hr>
+                          <% }%>
+
+                            <% }%>
+                </ol>
               </div>
             </div>
-            <div id="pPhoto">
-              <a href="/project/<%=data._id%>" class="imagebutton">
-                <img src="<%= data.imageURL %>" alt="Project-<%= data.title %>">
-              </a>
-            </div>
-          </div>
-          <div id="pagging">
-            <div id="paggingElements">
-              <button id="upButton">&#8593;</button>
-              <h2 id="projNum" value="<%= num %>"><%= num %></h2>
-              <button id="downButton" >&#8595;</button>
-    
-            </div>
-          </div>
-        </div>
-    </div>
+    </main>
+  </div>

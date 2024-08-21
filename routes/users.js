@@ -9,6 +9,7 @@ const { isLoggedIn } = require('../middleware');
 const multer = require('multer');
 const { storage } = require('../cloudinary');
 const upload = multer({ storage });
+const Campground = require('../models/campground');
 
 router.route('/register')
     .get(users.renderRegister)
@@ -19,9 +20,11 @@ router.route('/login')
     .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), users.login)
 
 router.get('/home', catchAsync(users.home))
+router.post('/search', catchAsync(users.search))
 
-router.get('/prof', isLoggedIn, (req, res) => {
-    res.render('profile', { webTitle: "Profile" })
+router.get('/prof', isLoggedIn, async(req, res) => {
+    const campgrounds = await Campground.find({ id: req.user._id });
+    res.render('profile', { webTitle: "Profile",  campgrounds})
 })
 
 router.get('/addProject', isLoggedIn, catchAsync(users.addProject))
@@ -50,6 +53,24 @@ router.post('/updateProfile', isLoggedIn, upload.single('image'), catchAsync(asy
     await account.save();
 
     res.redirect('/prof');
+}));
+
+router.post('/changePassword', isLoggedIn, catchAsync(async (req, res, next) => {
+    const { oldPassword, newPassword } = req.body;
+
+    // Find the account by ID
+    const account = await Account.findById(req.user._id);
+
+    // Use passport-local-mongoose's built-in changePassword method
+    account.changePassword(oldPassword, newPassword, (err) => {
+        if (err) {
+            req.flash('error', err.message);
+            return res.redirect('/prof');
+        }
+
+        req.flash('success', 'Password changed successfully!');
+        res.redirect('/prof');
+    });
 }));
 
 router.get('/logout', users.logout)

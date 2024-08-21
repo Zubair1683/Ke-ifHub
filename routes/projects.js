@@ -15,6 +15,7 @@ router.post('/addProject/:id', isLoggedIn, upload.array('image'), validateProjec
 
 router.post('/searchProject', catchAsync(projects.searchProject))
 
+
 router.get('/project/:accountID/:projectID', catchAsync(projects.displayProjectUserNotExists));
 
 router.get('/project/:id/:accountID/:projectID', isLoggedIn, isAccountAuthor, catchAsync(projects.displayProjectUserExists));
@@ -25,6 +26,8 @@ router.put('/project/:accountID/:projectID', isLoggedIn, isAccountAuthor , uploa
 
 
 router.delete('/project/:accountID/:projectID', isLoggedIn, isAccountAuthor, catchAsync(projects.deleteProject));
+
+router.get('/projects', catchAsync(projects.renderProjects));
 
 
 module.exports = router;
