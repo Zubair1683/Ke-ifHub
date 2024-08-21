@@ -15,7 +15,6 @@ module.exports.addProject = async (req, res, next) => {
 }
 
 module.exports.searchProject = async (req, res, next) => {
-    // const { id } = req.params;
      const searchedProject = req.body.search.toLowerCase();
      const accounts = await Account.find({});
      let orderedProjects = [];
@@ -56,7 +55,6 @@ module.exports.searchProject = async (req, res, next) => {
         
     }
     
-    console.log(project.GeneralviewCounter)
     project.GeneralviewCounter += 1;
     
     await account.save();
@@ -210,11 +208,9 @@ module.exports.renderProjects = async (req, res, next) => {
    
     orderedRecProjects.sort((a, b) => b.averageRating - a.averageRating).reverse();
     orderedProjects.reverse();
-//console.log(orderedRecProjects)
     orderedTrendProjects = filter(orderedTrendProjects);
     orderedRecProjects = filter(orderedRecProjects);
     orderedtopProjects = filter(orderedtopProjects);
-   // console.log(orderedTrendProjects.length)
     res.render(`projects`, { orderedtopProjects, orderedTrendProjects, orderedRecProjects,orderedProjects, accounts, webTitle: "projects" });
 }
 

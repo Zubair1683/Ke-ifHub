@@ -12,11 +12,8 @@ module.exports.index = async (req, res) => {
 }
 
 module.exports.searchCampground = async (req, res, next) => {
-    // const { id } = req.params;
-    console.log(12)
      const searchCampground = req.body.search.toLowerCase();
      const campgrounds = await Campground.find({}).populate('popupText');
-     const accounts = await Account.find({});
      let orderedcamps = [];
     
      // Step 1: Flatten the nested structure
@@ -56,7 +53,6 @@ module.exports.showCampground = async (req, res,) => {
         req.flash('error', 'Cannot find that campground!');
         return res.redirect('/campgrounds');
     }
-   // console.log(campground)
     res.render('campgrounds/show', { campground, reviews, webTitle: "campground.title" });
 }
 

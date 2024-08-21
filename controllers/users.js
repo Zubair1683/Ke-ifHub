@@ -29,7 +29,6 @@ module.exports.renderLogin = (req, res) => {
 
 module.exports.login = (req, res) => {
     req.flash('success', 'welcome back!');
-   // console.log(redirectUrl)
     if (!redirectUrl) {
         res.redirect(`/home`);
     }
@@ -48,23 +47,17 @@ module.exports.login = (req, res) => {
 module.exports.home = async (req, res, next) => {
     const accounts = await Account.find({});
     
-    //console.log(accounts[0])
     let orderedAll = [];
     let orderedProjects = [];
     let orderedtopProjects = [];
     let orderedTrendProjects = [];
     let orderedRecProjects = [];
-  
-// Now you can use the campground as needed
 
-//console.log(firstCampground);
     for (const account of accounts) {
         const campgrounds = await Campground.find({ id: account._id });
-        //const campground = account.campgrounds[0];
         for(const campground of campgrounds){
             orderedAll.push({ campground, author: account.username, accountID: account._id });
         }
-       // console.log(campgrounds);
         for (const project of account.projects) {
             orderedAll.push({ project, author: account.username, accountID: account._id });
             orderedProjects.push({ project, author: account.username, accountID: account._id });
@@ -128,11 +121,9 @@ module.exports.home = async (req, res, next) => {
      } ).reverse();
    
     orderedRecProjects.sort((a, b) => b.averageRating - a.averageRating).reverse();
-//console.log(orderedRecProjects)
     orderedTrendProjects = filter(orderedTrendProjects);
     orderedRecProjects = filter(orderedRecProjects);
     orderedtopProjects = filter(orderedtopProjects);
-   // console.log(orderedTrendProjects.length)
 
     res.render(`home`, { orderedtopProjects, orderedAll, orderedTrendProjects, orderedRecProjects, accounts, webTitle: "Home" });
 }
@@ -176,9 +167,6 @@ module.exports.search = async (req, res, next) => {
             new Date(b.project.date) - new Date(a.project.date)
         }
  });
-   let orderedtopProjects = [];
-    let orderedTrendProjects = [];
-    let orderedRecProjects = [];
      ordered = ordered.length > 0 ? ordered : null;
      res.render(`home`, { orderedtopProjects: ordered, orderedAll: ordered, orderedTrendProjects: ordered, orderedRecProjects: ordered, accounts, webTitle: "Home"})
  }

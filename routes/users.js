@@ -75,4 +75,13 @@ router.post('/changePassword', isLoggedIn, catchAsync(async (req, res, next) => 
 
 router.get('/logout', users.logout)
 
+
+router.get('/contact', isLoggedIn, (req, res) => {
+    res.render('contact', { webTitle: "Contact"})
+})
+
+router.get('/about', isLoggedIn, (req, res) => {
+    res.render('about', { webTitle: "about" })
+})
+
 module.exports = router;

@@ -34,7 +34,6 @@ module.exports.createCommentUserExist = async (req, res, next) => {
         // Find the project in the account's projects array by project ID
         const project = account.projects.id(projectID);
         const projects = account.projects;
-//console.log(project)
         const newComment = { username: username, text: req.body.text, rating: req.body.rating };
 
         // Add comment to project
