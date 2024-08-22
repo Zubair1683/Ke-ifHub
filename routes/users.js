@@ -10,6 +10,8 @@ const multer = require('multer');
 const { storage } = require('../cloudinary');
 const upload = multer({ storage });
 const Campground = require('../models/campground');
+const Products = require('../models/products');
+
 
 router.route('/register')
     .get(users.renderRegister)
@@ -24,7 +26,8 @@ router.post('/search', catchAsync(users.search))
 
 router.get('/prof', isLoggedIn, async(req, res) => {
     const campgrounds = await Campground.find({ id: req.user._id });
-    res.render('profile', { webTitle: "Profile",  campgrounds})
+    const products = await Products.find({ id: req.user._id });
+    res.render('profile', { webTitle: "Profile",  campgrounds, products})
 })
 
 router.get('/addProject', isLoggedIn, catchAsync(users.addProject))

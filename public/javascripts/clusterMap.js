@@ -10,7 +10,7 @@ const map = new maptilersdk.Map({
 map.on('load', function () {
     map.addSource('campgrounds', {
         type: 'geojson',
-        data: campgrounds,
+        data: items,
         cluster: true,
         clusterMaxZoom: 14, // Max zoom to cluster points on
         clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
@@ -88,7 +88,6 @@ map.on('load', function () {
     // the location of the feature, with
     // description HTML from its properties.
     map.on('click', 'unclustered-point', function (e) {
-        console.log(12)
         const { popUpMarkup } = e.features[0].properties;
         const coordinates = e.features[0].geometry.coordinates.slice();
 

@@ -21,6 +21,7 @@ const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
 const projectRoutes = require('./routes/projects');
 const commentRoutes = require('./routes/comment');
+const productRoutes = require('./routes/products');
 
 mongoose.connect('mongodb://localhost:27017/NewProject', {
     useNewUrlParser: true,
@@ -77,6 +78,7 @@ app.use((req, res, next) => {
 
 app.use('/', userRoutes);
 app.use('/campgrounds', campgroundRoutes)
+app.use('/products', productRoutes)
 app.use('/campgrounds/:id/reviews', reviewRoutes)
 app.use('/', projectRoutes);
 app.use('/', commentRoutes);

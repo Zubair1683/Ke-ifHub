@@ -1,6 +1,9 @@
 const User = require('../models/user');
 const Account = require('../models/accounts');
 const Campground = require('../models/campground');
+const Products = require('../models/products');
+const Review = require('../models/review');
+
 
 module.exports.renderRegister = (req, res) => {
     res.render('register', {webtitle: "Register"});
@@ -46,79 +49,73 @@ module.exports.login = (req, res) => {
 
 module.exports.home = async (req, res, next) => {
     const accounts = await Account.find({});
-    
     let orderedAll = [];
-    let orderedProjects = [];
-    let orderedtopProjects = [];
-    let orderedTrendProjects = [];
-    let orderedRecProjects = [];
 
     for (const account of accounts) {
         const campgrounds = await Campground.find({ id: account._id });
+        const products = await Products.find({ id: account._id });
+        for(const product of products){
+            orderedAll.push({ product, author: account.username, accountID: account._id });
+        }
         for(const campground of campgrounds){
             orderedAll.push({ campground, author: account.username, accountID: account._id });
         }
+        
         for (const project of account.projects) {
             orderedAll.push({ project, author: account.username, accountID: account._id });
-            orderedProjects.push({ project, author: account.username, accountID: account._id });
-            orderedtopProjects.push({ project, author: account.username, accountID: account._id });
-            orderedTrendProjects.push({ project, author: account.username, accountID: account._id });
-            orderedRecProjects.push({ project, author: account.username, accountID: account._id });
         }
     }
 
-    orderedTrendProjects = orderedAll;
+    let orderedTrendProjects = orderedAll;
+    let orderedtopProjects = orderedAll;
+    let orderedRecProjects = orderedAll;
 
-    // Step 2: Sort the flattened array based on a criterion
-
-    orderedRecProjects.forEach(project => {
-        const comments = project.project.comments;
-        const totalComments = comments.length;
-        let sumOfRating = 0;
-        for (let comment of comments) {
-            sumOfRating += comment.rating;
-        }
-
+    orderedRecProjects.forEach(item => {
+        const getDateAvR = (item) => {
+            if (item.product){
+                const reviews = item.product.reviews;
+                const totalReviews = reviews.length;
+                let sumOfRating = 0;
+                for (let review of reviews) {
+                    sumOfRating += review.rating;
+                 }
+                 return totalReviews > 0 ? (sumOfRating / totalReviews + totalReviews) : 0;
+            } 
+            if (item.campground) {
+                    const reviews = item.campground.reviews;
+                    const totalReviews = reviews.length;
+                    let sumOfRating = 0;
+                    for (let review of reviews) {
+                        sumOfRating += review.rating;
+                     }
+                     return totalReviews > 0 ? (sumOfRating / totalReviews + totalReviews) : 0;
+            }
+            if (item.project){
+                const reviews = item.project.reviews;
+                    const totalReviews = reviews.length;
+                    let sumOfRating = 0;
+                    for (let review of reviews) {
+                        sumOfRating += review.rating;
+                     }
+                     return totalReviews > 0 ? (sumOfRating / totalReviews + totalReviews) : 0;
+            }
+            return new Date(0); // Return a very old date if no date is found
+        };
         // Calculate the average rating
-        project.averageRating = totalComments > 0 ? (sumOfRating / totalComments + totalComments) : 0;
+        item.averageRating = getDateAvR(item);
        // console.log(project.averageRating, project.project.title)
     });
 
-    // Remove the averageRating property if you don't want it in the final sorted array
-    orderedRecProjects.forEach(project => {
+    // Step 2: Sort the projects based on the average rating
+    orderedRecProjects = packageSort(orderedRecProjects, 'averageRating');
+    orderedAll = packageSort(orderedAll, 'date');
+    orderedtopProjects = packageSort(orderedtopProjects, 'viewCounter');
+    orderedTrendProjects = packageSort(orderedTrendProjects, 'GeneralviewCounter')
+
+     // Remove the averageRating property if you don't want it in the final sorted array
+     orderedRecProjects.forEach(project => {
         delete project.averageRating;
     });
-
-    // Step 2: Sort the projects based on the average rating
-    orderedAll.sort((a, b) => {
-        if(a.campground && b.project){
-            new Date(b.project.date) - new Date(a.campground.date)
-        }
-        else if(b.campground && a.project){
-            new Date(b.campground.date) - new Date(a.project.date)
-        }
-        else if(a.campground && b.campground) {
-            new Date(b.campground.date) - new Date(a.campground.date)
-        }
-        else{
-            new Date(b.project.date) - new Date(a.project.date)
-        }
- });
-    orderedtopProjects.sort((a, b) => b.project.viewCounter - a.project.viewCounter);
-    orderedTrendProjects.sort((a, b) => {
-            if(a.campground && b.project){
-                b.project.GeneralviewCounter - a.campground.GeneralviewCounter
-            }
-            else if(b.campground && a.project){
-                b.campground.GeneralviewCounter - a.project.GeneralviewCounter
-            }
-            else if(a.campground && b.campground) {
-                b.campground.GeneralviewCounter - a.campground.GeneralviewCounter
-            }
-            else{
-                b.project.GeneralviewCounter - a.project.GeneralviewCounter
-            }
-     } ).reverse();
    
     orderedRecProjects.sort((a, b) => b.averageRating - a.averageRating).reverse();
     orderedTrendProjects = filter(orderedTrendProjects);
@@ -189,3 +186,31 @@ const filter = (project) => {
         return project = project.slice(0, 10);
     }
 }
+
+const packageSort = (items, element) => {
+    return items.sort((a, b) => {
+        let getValue = null;
+        if(element === 'date'){
+            getValue = (item) => {
+                if (item.product) return new Date(item.product.date);
+                if (item.campground) return new Date(item.campground.date);
+                if (item.project) return new Date(item.project.date);
+                return 0; // Default to 0 if no view counter is found
+            };
+        
+        }else{
+            getValue = (item) => {
+                if (item.product) return item.product[element] || 0;
+                if (item.campground) return item.campground[element] || 0;
+                if (item.project) return item.project[element] || 0;
+                return 0; // Default to 0 if no view counter is found
+            };
+        }
+       
+    
+        const counterA = getValue(a);
+        const counterB = getValue(b);
+    
+        return counterB - counterA; // Sort by descending view count
+    });
+};

@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
 const Campground = require('./campground');
+const Product = require('./products');
 const Schema = mongoose.Schema;
+const Review = require('./review')
 
 const ImageSchema = new Schema({
     url: String,
@@ -26,15 +28,11 @@ const ProjectSchema = new Schema({
     title: {
         type: String
     },
-    info: {
+    description: {
         type: String,
         required: true
     },
     images: [ImageSchema],
-    shortInfo: {
-        type: String,
-        required: true
-    },
     viewCounter: {
         type: Number,
         default: 0
@@ -47,7 +45,12 @@ const ProjectSchema = new Schema({
         username: String,
         id: String
     }],
-    comments: [CommentSchema],
+    reviews: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Review'
+        }
+    ],
     date: {
         type: Date,
         default: Date.now
@@ -94,6 +97,10 @@ const UserSchema = new Schema({
     campgrounds: [{
         type: Schema.Types.ObjectId,
         ref: 'Campground'
+    }],
+    products: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Product'
     }]
 });
 

@@ -21,6 +21,6 @@ router.route('/:id')
 
 router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(campgrounds.renderEditForm))
 
-
+router.get('/products', catchAsync(campgrounds.index));
 
 module.exports = router;

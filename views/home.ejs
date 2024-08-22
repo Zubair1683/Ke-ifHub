@@ -22,6 +22,11 @@
               <li data-target="#carouselExampleIndicators" data-slide-to="<%= j %>"
                 class="<%= j === 0 ? 'active' : '' %>"></li>
               <% } %>
+              <% } else if(orderedTrendProjects[j].product) { %>
+                <% if (orderedTrendProjects[j].product.images) { %>
+                  <li data-target="#carouselExampleIndicators" data-slide-to="<%= j %>"
+                    class="<%= j === 0 ? 'active' : '' %>"></li>
+                  <% } %>
             <% } else { %>
           <% if (orderedTrendProjects[j].project.images) { %>
             <li data-target="#carouselExampleIndicators" data-slide-to="<%= j %>"
@@ -51,6 +56,25 @@
                   </div>
                 </div>
                 <% } %>
+                <% } else if(orderedTrendProjects[j].product) { %>
+                  <% if (orderedTrendProjects[j].product.images) { %>
+                    <% let linkUrl=currentUser ?
+                    `/project/${currentUser._id}/${orderedTrendProjects[j].accountID}/${orderedTrendProjects[j].product._id}`
+                    : `/project/${orderedTrendProjects[j].accountID}/${orderedTrendProjects[j].product._id}`; %>
+                    <div class="carousel-item <%= j === 0 ? 'active' : '' %>">
+                      <a href="<%= linkUrl %>">
+                        <img src="<%= orderedTrendProjects[j].product.images[0].url %>" class="d-block w-100"
+                          alt="<%= orderedTrendProjects[j].product.title %>'s Image" style="height: 400px;">
+                      </a>
+                      <div class="carousel-caption custom-caption">
+                        <h5>
+                          <%= orderedTrendProjects[j].product.title %>
+                        </h5>
+                        <h4>By: <%= orderedTrendProjects[j].author %>
+                        </h4>
+                      </div>
+                    </div>
+                    <% } %>
             <% } else { %>
                 <% if (orderedTrendProjects[j].project.images) { %>
                   <% let linkUrl=currentUser ?
@@ -94,6 +118,9 @@
             <% if(project.campground) {%>
               <% project.project = project.campground%>
               <% } %>
+              <% if(project.product) {%>
+                <% project.project = project.product%>
+                <% } %>
             <h2>"<%= project.project.title %>" is published by <%= project.author %></h2>
             <div class="project">
               <div class="card rounded">
@@ -132,7 +159,7 @@
                       <hr>
                       
                         <p class="card-text"><span class="text-muted">Info: </span>
-                          <%=project.project.shortInfo%>
+                          <%=project.project.description.slice(0, 20) %>...
                         </p>
                         
                       </div>
@@ -175,7 +202,7 @@
                         <hr>
                         
                           <p class="card-text"><span class="text-muted">Info: </span>
-                            <%=project.project.shortInfo%>
+                            <%=project.project.description.slice(0, 20) %>...
                           </p>
                       </div>
                       <div class="card-footer text-muted w-100 mt-auto">

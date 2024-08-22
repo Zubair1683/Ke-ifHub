@@ -7,7 +7,7 @@
       <h1>Welcome, be ready to discover your Journey</h1> <hr>
     </div><br>
     <div class="container">
-      <form action="/campgrounds/searchCampground" method="POST" class="form-inline d-flex flex-row">
+      <form action="/products/searchProduct" method="POST" class="form-inline d-flex flex-row">
         <input class="form-control mr-sm-2" type="text" id="search" placeholder="Search" name="search">
         <button class="btn btn-dark my-2 my-sm-0" type="submit">Search</button>
       </form>
@@ -16,14 +16,14 @@
 
 <div class="container"><br>
 
-<% if (campgrounds){%>
+<% if (products){%>
     <h1>All Campgrounds</h1><hr>
-<% for (let campground of campgrounds){%>
+<% for (let product of products){%>
 <div class="card mb-3">
     <div class="row">
         <div class="col-md-4">
-            <%if(campground.images.length) {%>
-            <img class="img-fluid" alt="" src="<%=campground.images[0].url%>">
+            <%if(product.images.length) {%>
+            <img class="img-fluid" alt="" src="<%=product.images[0].url%>">
             <% }else {%>
             <img class="img-fluid" alt=""
                 src="https://res.cloudinary.com/douqbebwk/image/upload/v1600103881/YelpCamp/lz8jjv2gyynjil7lswf4.png">
@@ -31,13 +31,13 @@
         </div>
         <div class="col-md-8">
             <div class="card-body">
-                <h5 class="card-title"><%= campground.title %> </h5>
-                <h5 class="text-muted">Submitted by <%= campground.author%></h5>
-                <p class="card-text"><%= campground.description %></p>
+                <h5 class="card-title"><%= product.title %> </h5>
+                <h5 class="text-muted">Submitted by <%= product.author%></h5>
+                <p class="card-text"><%= product.description %></p>
                 <p class="card-text">
-                    <small class="text-muted"><%= campground.location%></small>
+                    <small class="text-muted"><%= product.location%></small>
                 </p>
-                <a class="btn btn-primary" href="/campgrounds/<%=campground._id%>">View <%=campground.title%></a>
+                <a class="btn btn-primary" href="/products/<%=product._id%>">View <%=product.title%></a>
             </div>
         </div>
     </div>
@@ -50,7 +50,7 @@
 </div>
 <script>
     const maptilerApiKey = '<%- process.env.MAPTILER_API_KEY %>';
-    const items = { features: <%- JSON.stringify(campgrounds) %>}
+    const items = { features: <%- JSON.stringify(products) %>}
 </script>
 
 <script src="/javascripts/clusterMap.js"></script>

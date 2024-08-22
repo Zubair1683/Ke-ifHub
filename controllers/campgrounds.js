@@ -8,6 +8,7 @@ const Review = require('../models/review');
 
 module.exports.index = async (req, res) => {
     const campgrounds = await Campground.find({}).populate('popupText');
+    //console.log(campgrounds)
     res.render('campgrounds/index', { campgrounds, webTitle: "Campgrounds"})
 }
 
@@ -48,7 +49,7 @@ module.exports.createCampground = async (req, res, next) => {
 
 module.exports.showCampground = async (req, res,) => {
     const campground = await Campground.findById(req.params.id).populate();
-    const reviews = await Review.find({ id: campground.id });
+    const reviews = await Review.find({ id: campground._id });
     if (!campground) {
         req.flash('error', 'Cannot find that campground!');
         return res.redirect('/campgrounds');

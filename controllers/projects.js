@@ -1,5 +1,6 @@
 const Account = require('../models/accounts');
 const { cloudinary } = require("../cloudinary");
+const Review = require('../models/review');
 
 module.exports.addProject = async (req, res, next) => {
     const { id } = req.params;
@@ -34,7 +35,8 @@ module.exports.searchProject = async (req, res, next) => {
  }
 
  module.exports.displayProjectUserNotExists = async (req, res, next) => {
-    const {  accountID, projectID } = req.params;
+    const { accountID, projectID } = req.params;
+    
     // Find the account by ID
     const account = await Account.findById(accountID);
 
@@ -45,23 +47,23 @@ module.exports.searchProject = async (req, res, next) => {
         return res.redirect(`/home`);
     }
     
-    for(let comment of project.comments){
-       // console.log(comment.username)
-        const account = await Account.findOne({ username: comment.username});
-        if(account){
-            if(account.image)comment.image = account.image;
+    // Update the comment images with the account's image if it exists
+    for(let review of project.reviews) {
+        const commentAccount = await Account.findOne({ username: review.username });
+        if (commentAccount && commentAccount.image) {
+            review.image = commentAccount.image;
         }
-        
-        
     }
     
-    project.GeneralviewCounter += 1;
-    
+    // Increase the GeneralviewCounter and mark the project as modified
+    project.generalViewCounter += 1;
+    const reviews = await Review.find({ id: project.id });
+    // Save the updated account
     await account.save();
     const projects = account.projects;
 
  // Return the updated project information to the client
- res.render('projectInfo', { project, webTitle: `${project.title}`, accountID, projects });
+ res.render('projectInfo', { project, webTitle: `${project.title}`, accountID, projects,reviews });
    
 }
 
@@ -79,10 +81,10 @@ module.exports.displayProjectUserExists = async (req, res, next) => {
         req.flash('error', 'Cannot find that project!');
         return res.redirect(`/home`);
     }
-    for(let comment of project.comments){
-        const account = await Account.findOne({ username: comment.username});
+    for(let review of project.reviews){
+        const account = await Account.findOne({ username: review.username});
         if(account){
-            if(account.image)comment.image = account.image;
+            if(account.image)review.image = account.image;
         }
     }
 
@@ -90,7 +92,8 @@ module.exports.displayProjectUserExists = async (req, res, next) => {
 
     // Check if the user is already in viewMembers
     const hasViewed = project.viewMembers.some(viewer => viewer.id === id);
-    project.GeneralviewCounter += 1;
+    project.generalViewCounter += 1;
+    const reviews = await Review.find({ id: project.id });
     if (!hasViewed) {
         project.viewCounter += 1;
         project.viewMembers.push(user);
@@ -99,7 +102,7 @@ module.exports.displayProjectUserExists = async (req, res, next) => {
     await account.save();
     const projects = account.projects;
  // Return the updated project information to the client
- res.render('projectInfo', { project, webTitle: `${project.title}`, accountID, projects });
+ res.render('projectInfo', { project, webTitle: `${project.title}`, accountID, projects,reviews });
    
 }
 
@@ -180,7 +183,7 @@ module.exports.renderProjects = async (req, res, next) => {
 
     // Step 2: Sort the flattened array based on a criterion
 
-    orderedRecProjects.forEach(project => {
+    /*orderedRecProjects.forEach(project => {
         const comments = project.project.comments;
         const totalComments = comments.length;
         let sumOfRating = 0;
@@ -191,7 +194,7 @@ module.exports.renderProjects = async (req, res, next) => {
         // Calculate the average rating
         project.averageRating = totalComments > 0 ? (sumOfRating / totalComments + totalComments) : 0;
        // console.log(project.averageRating, project.project.title)
-    });
+    });*/
 
     // Remove the averageRating property if you don't want it in the final sorted array
     orderedRecProjects.forEach(project => {

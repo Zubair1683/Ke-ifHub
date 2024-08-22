@@ -1,11 +1,16 @@
 const Campground = require('../models/campground');
 const Review = require('../models/review');
+const Account = require('../models/accounts');
 
 module.exports.createReview = async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     const review = new Review(req.body.review);
     review.author = req.user.username;
     review.id = campground._id;
+    const currentAccount = await Account.findById(req.user._id);
+        //console.log(currentAccount)
+        if(currentAccount.image) review.imageURL = currentAccount.image.url;
+        
     campground.reviews.push(review);
     await review.save();
     await campground.save();

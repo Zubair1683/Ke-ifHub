@@ -1,9 +1,11 @@
-const { campgroundSchema, reviewSchema } = require('./schemas.js');
+const { campgroundSchema, reviewSchema, productSchema } = require('./schemas.js');
 const ExpressError = require('./utils/ExpressError');
 const Campground = require('./models/campground');
 const Review = require('./models/review');
 const { projectSchema } = require('./schemas.js');
 const Account = require('./models/accounts');
+const Products = require('./models/products');
+
 
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -16,6 +18,16 @@ module.exports.isLoggedIn = (req, res, next) => {
 
 module.exports.validateCampground = (req, res, next) => {
     const { error } = campgroundSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
+
+module.exports.validateProduct = (req, res, next) => {
+    const { error } = productSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg, 400)
@@ -42,6 +54,16 @@ module.exports.isAuthor = async (req, res, next) => {
     if (!campground.id === req.user._id) {
         req.flash('error', 'You do not have permission to do that!');
         return res.redirect(`/campgrounds/${id}`);
+    }
+    next();
+}
+
+module.exports.isProductAuthor = async (req, res, next) => {
+    const { id } = req.params;
+    const product = await Products.findById(id);
+    if (!product.id === req.user._id) {
+        req.flash('error', 'You do not have permission to do that!');
+        return res.redirect(`/products/${id}`);
     }
     next();
 }
