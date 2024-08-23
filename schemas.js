@@ -34,7 +34,6 @@ module.exports.reviewSchema = Joi.object({
 module.exports.projectSchema = Joi.object({
       
     title: Joi.string().required(),
-    info: Joi.string().required(),
     //imageURL: Joi.string().required(),
     description: Joi.string().required(),
 deleteImages: Joi.array()

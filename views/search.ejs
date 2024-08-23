@@ -5,7 +5,7 @@
     <h1>Welcome, be ready to discover your Journey</h1> <hr>
   </div><br>
   <div class="container">
-    <form action="/searchProject" method="POST" class="form-inline d-flex flex-row">
+    <form action="/search" method="POST" class="form-inline d-flex flex-row">
       <input class="form-control mr-sm-2" type="text" id="search" placeholder="<%= searchedText %>" name="search">
       <button class="btn btn-dark my-2 my-sm-0" type="submit">Search</button>
     </form>
@@ -13,9 +13,15 @@
 </div>
   <div class="container">
     <main>
-      <div class="projects">
-        <% if(orderedProjects) {%>
-          <% for(let project of orderedProjects) {%>
+      <div class="projects" style="min-height: 500px;">
+        <% if(ordered) {%>
+          <% for(let project of ordered) {%>
+            <% if(project.campground) {%>
+              <% project.project = project.campground%>
+              <% } %>
+              <% if(project.product) {%>
+                <% project.project = project.product%>
+                <% } %>
             <div class="project">
               <div class="card rounded">
                 <div class="col">
@@ -90,7 +96,7 @@
                         </a>
                         <% }%>
                           <p class="card-text"><span class="text-muted">Info: </span>
-                            <%=project.project.shortInfo%>
+                            <%=project.project.description%>
                           </p>
                       </div>
                     </div>
@@ -121,33 +127,7 @@
             </div>
 
             <div class="viewSection">
-              <div class="viewpart">
-                <h1>Most Viewed</h1>
-                <ol id="topList">
-
-                  <% for(let i=0; i<4; i++) {%>
-                    <% let project=orderedtopProjects[i];%>
-                      <% if(!currentUser) {%>
-                        <li><a href="/project/<%=project.accountID%>/<%=project.project._id%>"
-                          style="text-decoration: none; color: black;">
-                          <h5 class="card-title">
-                            <%= project.project.title %>
-                          </h5>
-                        </a>
-                        <hr>
-                        <% } else {%>
-                          <li><a href="/project/<%= currentUser._id %>/<%=project.accountID%>/<%=project.project._id%>"
-                              style="text-decoration: none; color: black;">
-                              <h5 class="card-title">
-                                <%= project.project.title %>
-                              </h5>
-                            </a>
-                            <hr>
-                            <% }%>
-
-                              <% }%>
-                </ol>
-              </div>
+              
             </div>
     </main>
   </div>

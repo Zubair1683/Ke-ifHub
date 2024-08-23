@@ -12,7 +12,7 @@ new maptilersdk.Marker()
     .setPopup(
         new maptilersdk.Popup({ offset: 25 })
             .setHTML(
-                `<h3>${item.title}</h3><p>${item.location}</p>`
+                `<h5>${item.title}</h5><p>${item.location}</p>`
             )
     )
     .addTo(map)

@@ -60,7 +60,7 @@ module.exports.createProduct = async (req, res, next) => {
 
 module.exports.showProducts = async (req, res,) => {
     const product = await Products.findById(req.params.id).populate();
-    const reviews = await Review.find({ id: product.id });
+    const reviews = await Review.find({ id: product._id });
     if (!product) {
         req.flash('error', 'Cannot find that campground!');
         return res.redirect('/campgrounds');

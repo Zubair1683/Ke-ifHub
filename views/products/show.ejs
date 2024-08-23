@@ -68,11 +68,8 @@
     
             <% if(currentUser){ %>
             <h2>Leave a Review</h2>
-            <form action="/campgrounds/<%=product._id%>/reviews" method="POST" class="mb-3 validated-form" novalidate>
-                <!-- <div class="mb-3">
-                    <label class="form-label" for="rating">Rating</label>
-                    <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
-                </div> -->
+            <form action="/products/<%=product._id%>/reviews" method="POST" class="mb-3 validated-form" novalidate>
+                
                 <fieldset class="starability-basic">
                     <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked
                         aria-label="No rating." />
@@ -99,15 +96,20 @@
             <% } %>
             <% if(reviews.length > 0){ %>
             <% for(let review of reviews) { %>
-            <div class="card mb-3 ">
+                <div class="card mb-3 ">
                 <div class="card-body">
                     <p class="starability-result" data-rating="<%=review.rating%>">
                         Rated: <%= review.rating %> stars
                     </p>
+                    <li><% if(review.imageURL){%>
+                <img src="<%= review.imageURL %>" id="profileImage"  style="height: 40px; width: 40px;">
+                <%}else{%>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiZfk_mBRRAnMVpDjIrMbiU5DUxjWeZ5nqRQ&usqp=CAU" id="profileImage"  style="height: 40px; width: 40px;">
+                <%}%>
                      <h6 class="card-subtitle mb-2 text-muted">By <%= review.author%></h6>
                     <p class="card-text">Review: <%= review.body %></p>
                     <%  if( currentUser && review.author === currentUser.username)  {%>
-                    <form action="/campgrounds/<%=product._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
+                    <form action="/products/<%=product._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
                         <button class="btn btn-sm btn-danger">Delete</button>
                     </form>
                     <% } %>

@@ -6,7 +6,7 @@ const Review = require('../models/review');
 
 
 module.exports.renderRegister = (req, res) => {
-    res.render('register', {webtitle: "Register"});
+    res.render('register', { webtitle: "Register" });
 }
 
 module.exports.register = async (req, res, next) => {
@@ -27,7 +27,7 @@ module.exports.register = async (req, res, next) => {
 
 module.exports.renderLogin = (req, res) => {
     redirectUrl = req.session.returnTo;
-    res.render('login', {webTitle : "Login"});
+    res.render('login', { webTitle: "Login" });
 }
 
 module.exports.login = (req, res) => {
@@ -37,7 +37,7 @@ module.exports.login = (req, res) => {
     }
     else if (redirectUrl.includes('comment')) {
         let myArray = redirectUrl.split("/");
-        const url = "/" + myArray[1] + "/" + req.user._id  + "/" + myArray[3] + "/" + myArray[4];
+        const url = "/" + myArray[1] + "/" + req.user._id + "/" + myArray[3] + "/" + myArray[4];
         delete req.session.returnTo;
         res.redirect(url);
 
@@ -54,13 +54,13 @@ module.exports.home = async (req, res, next) => {
     for (const account of accounts) {
         const campgrounds = await Campground.find({ id: account._id });
         const products = await Products.find({ id: account._id });
-        for(const product of products){
+        for (const product of products) {
             orderedAll.push({ product, author: account.username, accountID: account._id });
         }
-        for(const campground of campgrounds){
+        for (const campground of campgrounds) {
             orderedAll.push({ campground, author: account.username, accountID: account._id });
         }
-        
+
         for (const project of account.projects) {
             orderedAll.push({ project, author: account.username, accountID: account._id });
         }
@@ -72,38 +72,38 @@ module.exports.home = async (req, res, next) => {
 
     orderedRecProjects.forEach(item => {
         const getDateAvR = (item) => {
-            if (item.product){
+            if (item.product) {
                 const reviews = item.product.reviews;
                 const totalReviews = reviews.length;
                 let sumOfRating = 0;
                 for (let review of reviews) {
                     sumOfRating += review.rating;
-                 }
-                 return totalReviews > 0 ? (sumOfRating / totalReviews + totalReviews) : 0;
-            } 
-            if (item.campground) {
-                    const reviews = item.campground.reviews;
-                    const totalReviews = reviews.length;
-                    let sumOfRating = 0;
-                    for (let review of reviews) {
-                        sumOfRating += review.rating;
-                     }
-                     return totalReviews > 0 ? (sumOfRating / totalReviews + totalReviews) : 0;
+                }
+                return totalReviews > 0 ? (sumOfRating / totalReviews + totalReviews) : 0;
             }
-            if (item.project){
+            if (item.campground) {
+                const reviews = item.campground.reviews;
+                const totalReviews = reviews.length;
+                let sumOfRating = 0;
+                for (let review of reviews) {
+                    sumOfRating += review.rating;
+                }
+                return totalReviews > 0 ? (sumOfRating / totalReviews + totalReviews) : 0;
+            }
+            if (item.project) {
                 const reviews = item.project.reviews;
-                    const totalReviews = reviews.length;
-                    let sumOfRating = 0;
-                    for (let review of reviews) {
-                        sumOfRating += review.rating;
-                     }
-                     return totalReviews > 0 ? (sumOfRating / totalReviews + totalReviews) : 0;
+                const totalReviews = reviews.length;
+                let sumOfRating = 0;
+                for (let review of reviews) {
+                    sumOfRating += review.rating;
+                }
+                return totalReviews > 0 ? (sumOfRating / totalReviews + totalReviews) : 0;
             }
             return new Date(0); // Return a very old date if no date is found
         };
         // Calculate the average rating
         item.averageRating = getDateAvR(item);
-       // console.log(project.averageRating, project.project.title)
+        // console.log(project.averageRating, project.project.title)
     });
 
     // Step 2: Sort the projects based on the average rating
@@ -112,11 +112,11 @@ module.exports.home = async (req, res, next) => {
     orderedtopProjects = packageSort(orderedtopProjects, 'viewCounter');
     orderedTrendProjects = packageSort(orderedTrendProjects, 'GeneralviewCounter')
 
-     // Remove the averageRating property if you don't want it in the final sorted array
-     orderedRecProjects.forEach(project => {
+    // Remove the averageRating property if you don't want it in the final sorted array
+    orderedRecProjects.forEach(project => {
         delete project.averageRating;
     });
-   
+
     orderedRecProjects.sort((a, b) => b.averageRating - a.averageRating).reverse();
     orderedTrendProjects = filter(orderedTrendProjects);
     orderedRecProjects = filter(orderedRecProjects);
@@ -131,42 +131,47 @@ module.exports.addProject = async (req, res, next) => {
 
 module.exports.search = async (req, res, next) => {
     // const { id } = req.params;
-     const searched = req.body.search.toLowerCase();
-     const accounts = await Account.find({});
-     const campgrounds = await Campground.find({}).populate('popupText');
-     let ordered = [];
-    
-     // Step 1: Flatten the nested structure
-     for (const account of accounts) {
-         for (const project of account.projects) {
-             let myArray = project.title.toLowerCase().split(" ");
-             if(project.title.toLowerCase() == searched || myArray.includes(searched)) ordered.push({ project, author: account.username, accountID: account._id });
- 
-         }
-         for (const campground of campgrounds) {
+    const searched = req.body.search.toLowerCase();
+    const accounts = await Account.find({});
+    const campgrounds = await Campground.find({}).populate('popupText');
+    const products = await Products.find({}).populate('popupText');
+    let ordered = [];
+    // Step 1: Flatten the nested structure
+    for (const account of accounts) {
+        for (const project of account.projects) {
+            let myArray = project.title.toLowerCase().split(" ");
+            const normalizedSearchProduct = searched.trim().toLowerCase();
+            //console.log(myArray)
+            // console.log(myArray.map(item => item.trim().toLowerCase()).includes(normalizedSearchProduct))
+            if (project.title.toLowerCase() === searched || myArray.map(item => item.trim().toLowerCase()).includes(normalizedSearchProduct)) ordered.push({ project, author: account.username, accountID: account._id });
+            //let myArray = product.title.toLowerCase().split(" ");
+
+            // if(product.title.toLowerCase() === searchProduct || myArray.includes(searchProduct)) orderedProducts.push(product);
+
+        }
+        for (const campground of campgrounds) {
             let myArray = campground.title.toLowerCase().split(" ");
             const account1 = await Account.findById(campground.id);
-            if(campground.title.toLowerCase() == searched || myArray.includes(searched)) ordered.push({ campground, author: account1.username, accountID: account1._id });
-    
+            if (campground.title.toLowerCase() == searched || myArray.includes(searched)) ordered.push({ campground, author: account1.username, accountID: account1._id });
+
+        }
+        for (const product of products) {
+            let myArray = product.title.toLowerCase().split(" ");
+            const normalizedSearchProduct = searched.trim().toLowerCase();
+            const account1 = await Account.findById(product.id);
+            // Check if product.title matches the normalized searchProduct or is in myArray
+            if (normalizedSearchProduct !== "" && product.title.toLowerCase() === normalizedSearchProduct || myArray.map(item => item.trim().toLowerCase()).includes(normalizedSearchProduct)) {
+                ordered.push({ product, author: account1.username, accountID: account1._id });
+            }
+            // if(product.title.toLowerCase() === searchProduct || myArray.includes(searchProduct)) orderedProducts.push(product);
+
+        }
     }
-     }
-     ordered.sort((a, b) => {
-        if(a.campground && b.project){
-            new Date(b.project.date) - new Date(a.campground.date)
-        }
-        else if(b.campground && a.project){
-            new Date(b.campground.date) - new Date(a.project.date)
-        }
-        else if(a.campground && b.campground) {
-            new Date(b.campground.date) - new Date(a.campground.date)
-        }
-        else{
-            new Date(b.project.date) - new Date(a.project.date)
-        }
- });
-     ordered = ordered.length > 0 ? ordered : null;
-     res.render(`home`, { orderedtopProjects: ordered, orderedAll: ordered, orderedTrendProjects: ordered, orderedRecProjects: ordered, accounts, webTitle: "Home"})
- }
+    //console.log(ordered)
+    ordered = packageSort(ordered, 'date');
+    ordered = ordered.length > 0 ? ordered : null;
+    res.render(`search`, { ordered, accounts, searchedText: req.body.search, webTitle: "Home" })
+}
 
 module.exports.logout = (req, res) => {
     req.logout();
@@ -190,15 +195,15 @@ const filter = (project) => {
 const packageSort = (items, element) => {
     return items.sort((a, b) => {
         let getValue = null;
-        if(element === 'date'){
+        if (element === 'date') {
             getValue = (item) => {
                 if (item.product) return new Date(item.product.date);
                 if (item.campground) return new Date(item.campground.date);
                 if (item.project) return new Date(item.project.date);
                 return 0; // Default to 0 if no view counter is found
             };
-        
-        }else{
+
+        } else {
             getValue = (item) => {
                 if (item.product) return item.product[element] || 0;
                 if (item.campground) return item.campground[element] || 0;
@@ -206,11 +211,11 @@ const packageSort = (items, element) => {
                 return 0; // Default to 0 if no view counter is found
             };
         }
-       
-    
+
+
         const counterA = getValue(a);
         const counterB = getValue(b);
-    
+
         return counterB - counterA; // Sort by descending view count
     });
 };
