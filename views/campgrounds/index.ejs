@@ -19,6 +19,10 @@
 <% if (campgrounds){%>
     <h1>All Campgrounds</h1><hr>
 <% for (let campground of campgrounds){%>
+    <% url3=`/goToProfile/${campground.id}`; %>
+                <% if(currentUser && campground.id.toString() === currentUser._id.toString()){%>
+                    <% url3=`/prof`; %>
+                    <%}%>
 <div class="card mb-3">
     <div class="row">
         <div class="col-md-4">
@@ -32,7 +36,7 @@
         <div class="col-md-8">
             <div class="card-body">
                 <h5 class="card-title"><%= campground.title %> </h5>
-                <h5 class="text-muted">Submitted by <%= campground.author%></h5>
+                <small class="text-muted">Submitted by <a href=<%=url3 %> style="text-decoration:none; color:grey"><%= campground.author%></a></small>
                 <p class="card-text"><%= campground.description %></p>
                 <p class="card-text">
                     <small class="text-muted"><%= campground.location%></small>

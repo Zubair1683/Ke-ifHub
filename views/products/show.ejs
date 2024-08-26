@@ -26,8 +26,9 @@
     
             <div class="card mb-3">
                 <div class="card-body">
+                    <% url3=`/goToProfile/${product.id}`; %>
                     <h5 class="card-title"><%= product.title%></h5>
-                    <h5 class="text-muted">Submitted by <%= product.author%></h5>
+                    <h5 class="text-muted">Submitted by <a href=<%=url3 %> style="text-decoration:none; color:grey"><%= product.author%></a></h5>
                     <p class="card-text"><%= product.description%></p>
                 </div>
                 <ul class="list-group list-group-flush">
@@ -96,6 +97,10 @@
             <% } %>
             <% if(reviews.length > 0){ %>
             <% for(let review of reviews) { %>
+                <% url3=`/goToProfile/${review.accountId}`; %>
+                <% if(currentUser && review.accountId.toString() === currentUser._id.toString()){%>
+                    <% url3=`/prof`; %>
+                    <%}%>
                 <div class="card mb-3 ">
                 <div class="card-body">
                     <p class="starability-result" data-rating="<%=review.rating%>">
@@ -106,7 +111,7 @@
                 <%}else{%>
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiZfk_mBRRAnMVpDjIrMbiU5DUxjWeZ5nqRQ&usqp=CAU" id="profileImage"  style="height: 40px; width: 40px;">
                 <%}%>
-                     <h6 class="card-subtitle mb-2 text-muted">By <%= review.author%></h6>
+                     <h6 class="card-subtitle mb-2 text-muted">By <a href=<%=url3 %> style="text-decoration:none; color:grey"><%= review.author%></a></h6>
                     <p class="card-text">Review: <%= review.body %></p>
                     <%  if( currentUser && review.author === currentUser.username)  {%>
                     <form action="/products/<%=product._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">

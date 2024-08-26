@@ -27,7 +27,8 @@
             <div class="card mb-3">
                 <div class="card-body">
                     <h5 class="card-title"><%= campground.title%></h5>
-                    <h5 class="text-muted">Submitted by <%= campground.author%></h5>
+                    <% url3=`/goToProfile/${campground.id}`; %>
+                    <h5 class="text-muted">Submitted by <a href=<%=url3 %> style="text-decoration:none; color:grey"><%= campground.author%></a></h5>
                     <p class="card-text"><%= campground.description%></p>
                 </div>
                 <ul class="list-group list-group-flush">
@@ -69,10 +70,7 @@
             <% if(currentUser){ %>
             <h2>Leave a Review</h2>
             <form action="/campgrounds/<%=campground._id%>/reviews" method="POST" class="mb-3 validated-form" novalidate>
-                <!-- <div class="mb-3">
-                    <label class="form-label" for="rating">Rating</label>
-                    <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
-                </div> -->
+                
                 <fieldset class="starability-basic">
                     <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked
                         aria-label="No rating." />
@@ -99,6 +97,11 @@
             <% } %>
             <% if(reviews.length > 0){ %>
             <% for(let review of reviews) { %>
+
+                <% url3=`/goToProfile/${review.accountId}`; %>
+                <% if(currentUser && review.accountId.toString() === currentUser._id.toString()){%>
+                    <% url3=`/prof`; %>
+                    <%}%>
             <div class="card mb-3 ">
                 <div class="card-body">
                     <p class="starability-result" data-rating="<%=review.rating%>">
@@ -109,7 +112,8 @@
                 <%}else{%>
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiZfk_mBRRAnMVpDjIrMbiU5DUxjWeZ5nqRQ&usqp=CAU" id="profileImage"  style="height: 40px; width: 40px;">
                 <%}%>
-                     <h6 class="card-subtitle mb-2 text-muted">By <%= review.author%></h6>
+                
+                     <h6 class="card-subtitle mb-2 text-muted">By <a href=<%=url3 %> style="text-decoration:none; color:grey"><%= review.author%></a></h6>
                     <p class="card-text">Review: <%= review.body %></p>
                     <%  if( currentUser && review.author === currentUser.username)  {%>
                     <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">

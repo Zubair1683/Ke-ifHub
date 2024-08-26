@@ -36,6 +36,16 @@ module.exports.validateProduct = (req, res, next) => {
     }
 }
 
+module.exports.validateProject = (req, res, next) => {
+    const { error } = projectSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
+
 module.exports.isAccountAuthor = async (req, res, next) => {
     //const { id } = req.params;
     const { accountID, projectID } = req.params;
@@ -88,12 +98,3 @@ module.exports.validateReview = (req, res, next) => {
     }
 }
 
-module.exports.validateProject = (req, res, next) => {
-    const { error } = projectSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}

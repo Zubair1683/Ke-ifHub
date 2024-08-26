@@ -42,7 +42,6 @@ module.exports.renderNewForm = (req, res) => {
 }
 
 module.exports.createProduct = async (req, res, next) => {
-    console.log(123)
     const geoData = await maptilerClient.geocoding.forward(req.body.product.location, { limit: 1 });
     const product = new Products(req.body.product);
     const account = await Account.findById(req.user._id);

@@ -18,6 +18,7 @@
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
       <ol class="carousel-indicators">
         <% for (let j=0; j < orderedTrendProjects.length; j++) { %>
+          
           <% if(orderedTrendProjects[j].campground) {%>
             <% if (orderedTrendProjects[j].campground.images) { %>
               <li data-target="#carouselExampleIndicators" data-slide-to="<%= j %>"
@@ -38,6 +39,10 @@
       </ol>
       <div class="carousel-inner">
         <% for (let j=0; j < orderedTrendProjects.length; j++) { %>
+          <% url3=`/goToProfile/${orderedTrendProjects[j].accountID}`; %>
+    <% if(currentUser && orderedTrendProjects[j].accountID.toString() === currentUser._id.toString()){%>
+        <% url3=`/profile`; %>
+        <%}%>
           <% if(orderedTrendProjects[j].campground) {%>
             <% if (orderedTrendProjects[j].campground.images) { %>
               <% let linkUrl=`/campgrounds/${orderedTrendProjects[j].campground._id}` %>
@@ -50,7 +55,7 @@
                     <h5>
                       <%= orderedTrendProjects[j].campground.title %>
                     </h5>
-                    <h4>By: <%= orderedTrendProjects[j].author %>
+                    <h4>By: <a href=<%=url3 %> style="text-decoration:none; color:white"><%= orderedTrendProjects[j].author %></a>
                     </h4>
                   </div>
                 </div>
@@ -67,17 +72,14 @@
                             <h5>
                               <%= orderedTrendProjects[j].product.title %>
                             </h5>
-                            <h4>By: <%= orderedTrendProjects[j].author %>
+                            <h4>By: <a href=<%=url3 %> style="text-decoration:none; color:white"><%= orderedTrendProjects[j].author %></a>
                             </h4>
                           </div>
                         </div>
                         <% } %>
                           <% } else { %>
                             <% if (orderedTrendProjects[j].project.images) { %>
-                              <% let linkUrl=currentUser ?
-                                `/project/${currentUser._id}/${orderedTrendProjects[j].accountID}/${orderedTrendProjects[j].project._id}`
-                                :
-                                `/project/${orderedTrendProjects[j].accountID}/${orderedTrendProjects[j].project._id}`;
+                              <% let linkUrl= `/projects/${orderedTrendProjects[j].project._id}`;
                                 %>
                                 <div class="carousel-item <%= j === 0 ? 'active' : '' %>">
                                   <a href="<%= linkUrl %>">
@@ -89,7 +91,7 @@
                                     <h5>
                                       <%= orderedTrendProjects[j].project.title %>
                                     </h5>
-                                    <h4>By: <%= orderedTrendProjects[j].author %>
+                                    <h4>By: <a href=<%=url3 %> style="text-decoration:none; color:white"><%= orderedTrendProjects[j].author %></a>
                                     </h4>
                                   </div>
                                 </div>
@@ -115,18 +117,23 @@
       <div class="projects">
         <% if(orderedAll) {%>
           <% for(let project of orderedAll) {%>
+            <% url3=`/goToProfile/${project.accountID}`; %>
+    <% if(currentUser && project.accountID.toString() === currentUser._id.toString()){%>
+        <% url3=`/profile`; %>
+        <%}%>
             <% let url1=null %>
               <% let url2=null %>
                 <% if(project.project) {%>
                   <% if(currentUser) {%>
-                    <%url1=`/project/${currentUser._id}/${project.accountID}/${project.project._id}`; %>
+                    <%url1=`/projects/${project.project._id}`; %>
                       <% } %>
-                        <% url2=`/project/${project.accountID}/${project.project._id}`; %>
+                        <% url2=`/projects/${project.project._id}`; %>
 
                           <% } %>
                             <% if(project.campground) {%>
                               <% url1=`/campgrounds/${project.campground._id}` %>
                                 <% url2=`/campgrounds/${project.campground._id}` %>
+                                
                                   <% project.project=project.campground%>
                                     <% } %>
                                       <% if(project.product) {%>
@@ -136,7 +143,8 @@
                                               <% } %>
 
                                                 <div><h4><%= project.project.title %></h4>
-                                                  <h5 class="text-muted">published by <%= project.author %></h5></div>
+                                                  <h5 class="text-muted">published by <a href=<%=url3 %> style="text-decoration:none; color:grey"><%= project.author %></a></h5>
+                                                  </div>
                                                 
                                                 <div class="project">
                                                   <div class="card rounded">
@@ -162,7 +170,7 @@
                                                               </h5>
 
                                                             </a>
-                                                            <li class="text-muted">By: <%= project.author %>
+                                                            <li class="text-muted">By: <a href=<%=url3 %> style="text-decoration:none; color:grey"><%= project.author %></a>
                                                             </li>
                                                             <li class="text-muted">
                                                               <span>Published: </span>
@@ -211,7 +219,7 @@
                                                                 </h5>
                                                               </a>
 
-                                                              <li class="text-muted">By: <%= project.author %>
+                                                              <li class="text-muted">By: <a href=<%=url3 %> style="text-decoration:none; color:grey"><%= project.author %></a>
                                                               </li>
                                                               <li class="text-muted">
                                                                 <span>Published: </span>
@@ -259,14 +267,19 @@
           <ol id="topList">
 
             <% for(let i=0; i<orderedRecProjects.length; i++) {%>
+              
               <% let project=orderedRecProjects[i];%>
+              <% url3=`/goToProfile/${project.accountID}`; %>
+    <% if(currentUser && project.accountID.toString() === currentUser._id.toString()){%>
+        <% url3=`/profile`; %>
+        <%}%>
               <% let url1=null %>
               <% let url2=null %>
                 <% if(project.project) {%>
                   <% if(currentUser) {%>
-                    <%url1=`/project/${currentUser._id}/${project.accountID}/${project.project._id}`; %>
+                    <%url1=`/projects/${project.project._id}`; %>
                       <% } %>
-                        <% url2=`/project/${project.accountID}/${project.project._id}`; %>
+                        <% url2=`/projects/${project.project._id}`; %>
 
                           <% } %>
                             <% if(project.campground) {%>
@@ -285,7 +298,9 @@
                       <h5 class="card-title">
                         <%= project.project.title %>
                       </h5>
-                    </a></li>
+
+                    </a>
+                    <h5 class="text-muted">published by <a href=<%=url3 %> style="text-decoration:none; color:grey"><%= project.author %></a></h5></li>
                   <hr>
                   <% } else {%>
                     <li><a href="<%=url2%>"
@@ -293,7 +308,9 @@
                         <h5 class="card-title">
                           <%= project.project.title %>
                         </h5>
-                      </a></li>
+                      </a>
+                      <h5 class="text-muted">published by <a href=<%=url3 %> style="text-decoration:none; color:grey"><%= project.author %></a></h5></li>
+                    </li>
                     <hr>
                     <% }%>
 
@@ -306,13 +323,17 @@
 
             <% for(let i=0; i<orderedtopProjects.length; i++) {%>
               <% let project=orderedtopProjects[i];%>
+              <% url3=`/goToProfile/${project.accountID}`; %>
+    <% if(currentUser && project.accountID.toString() === currentUser._id.toString()){%>
+        <% url3=`/profile`; %>
+        <%}%>
               <% let url1=null %>
               <% let url2=null %>
                 <% if(project.project) {%>
                   <% if(currentUser) {%>
-                    <%url1=`/project/${currentUser._id}/${project.accountID}/${project.project._id}`; %>
+                    <%url1=`/projects/${project.project._id}`; %>
                       <% } %>
-                        <% url2=`/project/${project.accountID}/${project.project._id}`; %>
+                        <% url2=`/projects/${project.project._id}`; %>
 
                           <% } %>
                             <% if(project.campground) {%>
@@ -332,6 +353,7 @@
                         <%= project.project.title %>
                       </h5>
                     </a>
+                    <h5 class="text-muted">published by <a href=<%=url3 %> style="text-decoration:none; color:grey"><%= project.author %></a></h5></li>
                     <hr>
                     <% } else {%>
                   <li><a href="<%=url2%>"
@@ -340,6 +362,8 @@
                         <%= project.project.title %>
                       </h5>
                     </a>
+                    <h5 class="text-muted">published by <a href=<%=url3 %> style="text-decoration:none; color:grey"><%= project.author %></a></h5></li>
+
                     <hr>
                     <% }%>
 

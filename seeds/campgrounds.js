@@ -48,7 +48,7 @@ const seedDB = async () => {
                     filename: 'YelpCamp/ruyoaxgf72nzpi4y6cdi'
                 }
             ],
-            id: "66c7285fc431090adceb82eb"
+            id: "66cc621acc14ca4d9c5d47c7"
         })
         await camp.save();
     }

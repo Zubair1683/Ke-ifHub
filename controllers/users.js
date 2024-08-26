@@ -1,12 +1,11 @@
-const User = require('../models/user');
 const Account = require('../models/accounts');
 const Campground = require('../models/campground');
 const Products = require('../models/products');
-const Review = require('../models/review');
+const Projects = require('../models/projects');
 
 
 module.exports.renderRegister = (req, res) => {
-    res.render('register', { webtitle: "Register" });
+    res.render('users/register', { webtitle: "Register" });
 }
 
 module.exports.register = async (req, res, next) => {
@@ -27,7 +26,7 @@ module.exports.register = async (req, res, next) => {
 
 module.exports.renderLogin = (req, res) => {
     redirectUrl = req.session.returnTo;
-    res.render('login', { webTitle: "Login" });
+    res.render('users/login', { webTitle: "Login" });
 }
 
 module.exports.login = (req, res) => {
@@ -47,6 +46,58 @@ module.exports.login = (req, res) => {
     }
 }
 
+module.exports.renderProfile = async(req, res) => {
+    const campgrounds = await Campground.find({ id: req.user._id });
+    const products = await Products.find({ id: req.user._id });
+    const projects = await Projects.find({ id: req.user._id });
+    
+    res.render('users/profile', { webTitle: "Profile",  campgrounds, products, projects})
+}
+
+module.exports.renderProfileEdit = (req, res) => {
+    res.render('users/profileEdit', { webTitle: "about" })
+}
+
+module.exports.updateProfile = async (req, res, next) => {
+    const account = await Account.findById(req.user._id);
+    if (req.file) {
+        const img = { url: req.file.path, filename: req.file.filename };
+        account.image = img;
+    }
+
+   
+    account.firstname = req.body.firstname;
+    account.lastname = req.body.lastname;
+    account.email = req.body.email;
+    account.phonenumber = req.body.phonenumber;
+    account.country = req.body.country;
+    account.city = req.body.city;
+    account.zipcode = req.body.zipcode;
+    account.birthday = req.body.birthday;
+    account.username = req.body.username;
+    await account.save();
+
+    res.redirect('/profile');
+}
+
+module.exports.changePassword = async (req, res, next) => {
+    const { oldPassword, newPassword } = req.body;
+
+    // Find the account by ID
+    const account = await Account.findById(req.user._id);
+
+    // Use passport-local-mongoose's built-in changePassword method
+    account.changePassword(oldPassword, newPassword, (err) => {
+        if (err) {
+            req.flash('error', err.message);
+            return res.redirect('/profile');
+        }
+
+        req.flash('success', 'Password changed successfully!');
+        res.redirect('/profile');
+    });
+}
+
 module.exports.home = async (req, res, next) => {
     const accounts = await Account.find({});
     let orderedAll = [];
@@ -54,6 +105,7 @@ module.exports.home = async (req, res, next) => {
     for (const account of accounts) {
         const campgrounds = await Campground.find({ id: account._id });
         const products = await Products.find({ id: account._id });
+        const projects = await Projects.find({ id: account._id });
         for (const product of products) {
             orderedAll.push({ product, author: account.username, accountID: account._id });
         }
@@ -61,7 +113,7 @@ module.exports.home = async (req, res, next) => {
             orderedAll.push({ campground, author: account.username, accountID: account._id });
         }
 
-        for (const project of account.projects) {
+        for (const project of projects) {
             orderedAll.push({ project, author: account.username, accountID: account._id });
         }
     }
@@ -122,12 +174,9 @@ module.exports.home = async (req, res, next) => {
     orderedRecProjects = filter(orderedRecProjects);
     orderedtopProjects = filter(orderedtopProjects);
 
-    res.render(`home`, { orderedtopProjects, orderedAll, orderedTrendProjects, orderedRecProjects, accounts, webTitle: "Home" });
+    res.render(`users/home`, { orderedtopProjects, orderedAll, orderedTrendProjects, orderedRecProjects, accounts, webTitle: "Home" });
 }
 
-module.exports.addProject = async (req, res, next) => {
-    res.render('addProject', { webtitle: "addProject" })
-}
 
 module.exports.search = async (req, res, next) => {
     // const { id } = req.params;
@@ -135,25 +184,25 @@ module.exports.search = async (req, res, next) => {
     const accounts = await Account.find({});
     const campgrounds = await Campground.find({}).populate('popupText');
     const products = await Products.find({}).populate('popupText');
+    const projects = await Projects.find({}).populate('popupText');
     let ordered = [];
     // Step 1: Flatten the nested structure
     for (const account of accounts) {
-        for (const project of account.projects) {
+        for (const project of projects) {
             let myArray = project.title.toLowerCase().split(" ");
             const normalizedSearchProduct = searched.trim().toLowerCase();
-            //console.log(myArray)
-            // console.log(myArray.map(item => item.trim().toLowerCase()).includes(normalizedSearchProduct))
-            if (project.title.toLowerCase() === searched || myArray.map(item => item.trim().toLowerCase()).includes(normalizedSearchProduct)) ordered.push({ project, author: account.username, accountID: account._id });
-            //let myArray = product.title.toLowerCase().split(" ");
-
-            // if(product.title.toLowerCase() === searchProduct || myArray.includes(searchProduct)) orderedProducts.push(product);
-
+            const account1 = await Account.findById(project.id);
+            if (normalizedSearchProduct !== "" && project.title.toLowerCase() === normalizedSearchProduct || myArray.map(item => item.trim().toLowerCase()).includes(normalizedSearchProduct)) {
+                ordered.push({ project, author: account1.username, accountID: account1._id });
+            }   
         }
         for (const campground of campgrounds) {
             let myArray = campground.title.toLowerCase().split(" ");
+            const normalizedSearchProduct = searched.trim().toLowerCase();
             const account1 = await Account.findById(campground.id);
-            if (campground.title.toLowerCase() == searched || myArray.includes(searched)) ordered.push({ campground, author: account1.username, accountID: account1._id });
-
+            if (normalizedSearchProduct !== "" && campground.title.toLowerCase() === normalizedSearchProduct || myArray.map(item => item.trim().toLowerCase()).includes(normalizedSearchProduct)) {
+                ordered.push({ campground, author: account1.username, accountID: account1._id });
+            } 
         }
         for (const product of products) {
             let myArray = product.title.toLowerCase().split(" ");
@@ -163,14 +212,11 @@ module.exports.search = async (req, res, next) => {
             if (normalizedSearchProduct !== "" && product.title.toLowerCase() === normalizedSearchProduct || myArray.map(item => item.trim().toLowerCase()).includes(normalizedSearchProduct)) {
                 ordered.push({ product, author: account1.username, accountID: account1._id });
             }
-            // if(product.title.toLowerCase() === searchProduct || myArray.includes(searchProduct)) orderedProducts.push(product);
-
         }
     }
-    //console.log(ordered)
     ordered = packageSort(ordered, 'date');
     ordered = ordered.length > 0 ? ordered : null;
-    res.render(`search`, { ordered, accounts, searchedText: req.body.search, webTitle: "Home" })
+    res.render(`users/search`, { ordered, accounts, searchedText: req.body.search, webTitle: "Home" })
 }
 
 module.exports.logout = (req, res) => {

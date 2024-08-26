@@ -33,7 +33,7 @@
                         <div class="carousel-inner">
                             <% project.project.images.forEach((img, i) => {  %>
                             <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
-                              <a href="/project/<%= currentUser._id %>/<%=project.accountID%>/<%=project.project._id%>">
+                              <a href="/project/<%=project.project._id%>">
                                 <img src="<%= img.url%>" class="d-block w-100" alt="<%=project.project.title%>'s Image" style="height: 300px;"></a>
                             </div>
                             <% }) %>
@@ -53,7 +53,7 @@
                   </div>
                   <div class="row">
                     <div class="card-body" style="min-height: 185px;">
-                      <a href="/project/<%= currentUser._id %>/<%=project.accountID%>/<%=project.project._id%>"
+                      <a href="/project/<%=project.project._id%>"
                         style="text-decoration: none; color: black;">
                         <h5 class="card-title">
                           <%= project.project.title %>
@@ -66,7 +66,7 @@
                             <div class="carousel-inner">
                                 <% project.project.images.forEach((img, i) => {  %>
                                 <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
-                                  <a href="/project/<%=project.accountID%>/<%=project.project._id%>">
+                                  <a href="/project/<%=project.project._id%>">
                                     <img src="<%= img.url%>" class="d-block w-100" alt="<%=project.project.title%>'s Image" style="height: 300px;"></a>
                                 </div>
                                 <% }) %>
@@ -86,7 +86,7 @@
                     </div>
                     <div class="row">
                       <div class="card-body" style="min-height: 185px;">
-                        <a href="/project/<%=project.accountID%>/<%=project.project._id%>"
+                        <a href="/project/<%=project.project._id%>"
                           style="text-decoration: none; color: black;">
                           <h5 class="card-title">
                             <%= project.project.title %>
@@ -96,7 +96,7 @@
                         </a>
                         <% }%>
                           <p class="card-text"><span class="text-muted">Info: </span>
-                            <%=project.project.description%>
+                            <%=project.project.description.slice(0, 20)%>
                           </p>
                       </div>
                     </div>

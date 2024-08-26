@@ -7,6 +7,7 @@ const reviewSchema = new Schema({
     rating: Number,
     author: String,
     id: String,
+    accountId: String,
     date: {
         type: Date,
         default: Date.now

@@ -1,19 +1,9 @@
 const Account = require('../models/accounts');
 const { cloudinary } = require("../cloudinary");
 const Review = require('../models/review');
+const Projects = require('../models/projects');
 
-module.exports.addProject = async (req, res, next) => {
-    const { id } = req.params;
-    const newProject = req.body;
-    newProject.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
-    const updatedAccount = await Account.findByIdAndUpdate(
-        id,
-        { $push: { projects: newProject } },
-        { new: true }
-    );
-    req.flash('success', 'Successfully made a new project!');
-    res.redirect(`/prof`);
-}
+
 
 module.exports.searchProject = async (req, res, next) => {
      const searchedProject = req.body.search.toLowerCase();
@@ -67,20 +57,16 @@ module.exports.searchProject = async (req, res, next) => {
    
 }
 
-module.exports.displayProjectUserExists = async (req, res, next) => {
-    const { id, accountID, projectID } = req.params;
+module.exports.displayProject = async (req, res, next) => {
+    const project = await Projects.findById(req.params.id).populate();
+    const reviews = await Review.find({ id: project._id });
     // Find the account by ID
-    
-    const account = await Account.findById(accountID);
-
-    // Find the memebr by ID
-    const member = await Account.findById(id);
-    // Find the project in the account's projects array by project ID and update its viewCounter
-    const project = account.projects.id(projectID);
     if (!project) {
-        req.flash('error', 'Cannot find that project!');
-        return res.redirect(`/home`);
+        req.flash('error', 'Cannot find that campground!');
+        return res.redirect('/projects');
     }
+    // Find the memebr by ID
+   /* const member = await Account.findById(id);
     for(let review of project.reviews){
         const account = await Account.findOne({ username: review.username});
         if(account){
@@ -93,17 +79,36 @@ module.exports.displayProjectUserExists = async (req, res, next) => {
     // Check if the user is already in viewMembers
     const hasViewed = project.viewMembers.some(viewer => viewer.id === id);
     project.generalViewCounter += 1;
-    const reviews = await Review.find({ id: project.id });
+    //const reviews = await Review.find({ id: project.id });
     if (!hasViewed) {
         project.viewCounter += 1;
         project.viewMembers.push(user);
         
     }
-    await account.save();
-    const projects = account.projects;
+    await account.save();*/
+    const projects = await Projects.find({}).populate();
  // Return the updated project information to the client
- res.render('projectInfo', { project, webTitle: `${project.title}`, accountID, projects,reviews });
+ res.render('projects/projectInfo', { project, reviews, webTitle: "product.title",projects });
+
+ //res.render('projectInfo', { project, webTitle: `${project.title}`, accountID, projects,reviews });
    
+}
+
+module.exports.renderAddProject = async (req, res, next) => {
+    res.render('projects/addProject', { webtitle: "addProject" })
+}
+
+module.exports.createProject = async (req, res, next) => {
+    const newProject = new Projects(req.body.project);
+    const account = await Account.findById(req.user._id);
+    newProject.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    newProject.author = req.user.username;
+    newProject.id = account._id;
+    account.projects.push(newProject);
+    await newProject.save();
+    await account.save();
+    req.flash('success', 'Successfully made a new project!');
+    res.redirect(`/projects/${newProject._id}`);
 }
 
 module.exports.editProject = async (req, res, next) => {
@@ -160,42 +165,20 @@ module.exports.deleteProject = async (req, res, next) => {
 
 module.exports.renderProjects = async (req, res, next) => {
     const accounts = await Account.find({});
-    
     //console.log(accounts[0])
     let orderedProjects = [];
-    let orderedtopProjects = [];
-    let orderedTrendProjects = [];
-    let orderedRecProjects = [];
   
-// Now you can use the campground as needed
-
-//console.log(firstCampground);
     for (const account of accounts) {
-       // console.log(campgrounds);
-        for (const project of account.projects) {
+        const projects = await Projects.find({ id: account._id });
+        for (const project of projects) {
             orderedProjects.push({ project, author: account.username, accountID: account._id });
-            orderedtopProjects.push({ project, author: account.username, accountID: account._id });
-            orderedTrendProjects.push({ project, author: account.username, accountID: account._id });
-            orderedRecProjects.push({ project, author: account.username, accountID: account._id });
         }
     }
 
-
-    // Step 2: Sort the flattened array based on a criterion
-
-    /*orderedRecProjects.forEach(project => {
-        const comments = project.project.comments;
-        const totalComments = comments.length;
-        let sumOfRating = 0;
-        for (let comment of comments) {
-            sumOfRating += comment.rating;
-        }
-
-        // Calculate the average rating
-        project.averageRating = totalComments > 0 ? (sumOfRating / totalComments + totalComments) : 0;
-       // console.log(project.averageRating, project.project.title)
-    });*/
-
+    let orderedTrendProjects = orderedProjects;
+    let orderedtopProjects = orderedProjects;
+    let orderedRecProjects = orderedProjects;
+    
     // Remove the averageRating property if you don't want it in the final sorted array
     orderedRecProjects.forEach(project => {
         delete project.averageRating;
@@ -214,7 +197,7 @@ module.exports.renderProjects = async (req, res, next) => {
     orderedTrendProjects = filter(orderedTrendProjects);
     orderedRecProjects = filter(orderedRecProjects);
     orderedtopProjects = filter(orderedtopProjects);
-    res.render(`projects`, { orderedtopProjects, orderedTrendProjects, orderedRecProjects,orderedProjects, accounts, webTitle: "projects" });
+    res.render(`projects/projects`, { orderedtopProjects, orderedTrendProjects, orderedRecProjects,orderedProjects, accounts, webTitle: "projects" });
 }
 
 const filter = (project) => {

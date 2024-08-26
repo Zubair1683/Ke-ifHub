@@ -50,7 +50,7 @@ const seedDB = async () => {
                         filename: json[i].title
                     }
                 ],
-                id: "66c7285fc431090adceb82eb"
+                id: "66cc621acc14ca4d9c5d47c7"
             });
             await product.save(); // Save each product
         }

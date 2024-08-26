@@ -7,10 +7,10 @@
   </div>
     <h1 class="text ml-5 mb-3">Add project</h1>
     <div class="col-4 offset-1">
-        <form action="/addProject/<%=currentUser._id%>" method="POST"  novalidate class="validated-form" enctype="multipart/form-data">
+        <form action="/projects" method="POST"  novalidate class="validated-form" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
-                <input class="form-control" type="text" id="title" name="title" required>
+                <input class="form-control" type="text" id="title" name="project[title]" required>
                 <div class="valid-feedback">
                   Looks good!
               </div>
@@ -27,7 +27,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label" for="description">Description</label>
-                <textarea class="form-control" type="text" id="description" name="description" required></textarea>
+                <textarea class="form-control" type="text" id="description" name="project[description]" required></textarea>
                 <div class="valid-feedback">
                   Looks good!
               </div>

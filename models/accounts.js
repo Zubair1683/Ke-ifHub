@@ -14,49 +14,6 @@ ImageSchema.virtual('thumbnail').get(function () {
     return this.url.replace('/upload', '/upload/w_200');
 });
 
-const CommentSchema = new Schema({
-    username: String,
-    text: String,
-    rating: Number,
-    date: {
-        type: Date,
-        default: Date.now
-    }
-});
-
-const ProjectSchema = new Schema({
-    title: {
-        type: String
-    },
-    description: {
-        type: String,
-        required: true
-    },
-    images: [ImageSchema],
-    viewCounter: {
-        type: Number,
-        default: 0
-    },
-    generalViewCounter: {
-        type: Number,
-        default: 0
-    },
-    viewMembers: [{
-        username: String,
-        id: String
-    }],
-    reviews: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Review'
-        }
-    ],
-    date: {
-        type: Date,
-        default: Date.now
-    }
-});
-
 const UserSchema = new Schema({
     firstname: {
         type: String,
@@ -93,7 +50,10 @@ const UserSchema = new Schema({
         unique: true
     },
     image: ImageSchema,
-    projects: [ProjectSchema],
+    projects: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Project'
+    }],
     campgrounds: [{
         type: Schema.Types.ObjectId,
         ref: 'Campground'

@@ -7,6 +7,7 @@ module.exports.createCampReview = async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     const review = new Review(req.body.review);
     review.author = req.user.username;
+    review.accountId = req.user._id;
     review.id = campground._id;
     const currentAccount = await Account.findById(req.user._id);
         //console.log(currentAccount)
@@ -23,6 +24,7 @@ module.exports.createProductReview = async (req, res) => {
     const product = await products.findById(req.params.id);
     const review = new Review(req.body.review);
     review.author = req.user.username;
+    review.accountId = req.user._id;
     review.id = product._id;
     const currentAccount = await Account.findById(req.user._id);
         //console.log(currentAccount)

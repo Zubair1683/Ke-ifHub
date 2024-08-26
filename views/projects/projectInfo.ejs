@@ -38,7 +38,7 @@
         <div class="addComment">
           <h2>Leave a Comment</h2>
           <% if(currentUser) {%>
-            <form action="/project/<%=accountID%>/<%=project._id%>/<%=currentUser._id%>/comment" id="addComment" method="POST">
+            <form action="/projects/<%=project._id%>/reviews" id="addComment" method="POST">
               <fieldset class="starability-basic">
                 <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked
                     aria-label="No rating." />
@@ -63,11 +63,9 @@
             <button class="btn btn-success">Submit</button>
             </form>
             <% } else {%>
-              <form action="/project/comment/<%=accountID%>/<%=project._id%>" id="addComment" method="POST">
-                <textarea class="comment" id="comment" name="text" placeholder="Type your comment..." rows="5" cols="50"
-                  maxlength="500" required></textarea><br>
-                <input type="submit" class="bg-info">
-              </form>
+              <div>
+
+              </div>
               <% }%>
           
         </div>
@@ -103,7 +101,7 @@
                 }
               %></li><br>
               <% if(currentUser && (currentUser._id == accountID || review.username === currentUser.username)) {%>
-                <form action="/project/<%=accountID%>/<%=project._id%>/<%=review._id%>?_method=DELETE" method="POST">
+                <form action="/projects/<%=project._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
                   <button class="btn btn-sm btn-danger">Delete</button>
               </form>
                 <% } %>
@@ -118,16 +116,10 @@
       <div class="ProjectRec">
         <h1>Recommended project</h1><hr><br>
         <% for(let project of projects){ %>
-          <% if(currentUser) { %>
-            <a href="/project/<%=currentUser._id%>/<%=accountID%>/<%=project._id%>" style="text-decoration: none; color: black;">
+         
+            <a href="/projects/<%=project._id%>" style="text-decoration: none; color: black;">
                     <h5 class="card-title"><%= project.title %></h5>
                   </a><hr>
-              <% } else {%>
-                <a href="/project/<%=accountID%>/<%=project._id%>" style="text-decoration: none; color: black;">
-                    <h5 class="card-title"><%= project.title %></h5>
-                  </a><hr>
-               <%} %>
-          
           <% }%>
         <div>
         </div>

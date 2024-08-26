@@ -4,8 +4,8 @@
             <div class="col-3 bg-white border-2 border-dark" style=" box-shadow: 10px 10px 50px 5px rgb(77, 78, 78);">
                     <div class="container d-flex justify-content-center mt-3">
                       
-                        <% if(currentUser.image){%>
-                            <img src="<%= currentUser.image.url %>" id="profileImage"  style="height: 60%; width: 60%;">
+                        <% if(account.image){%>
+                            <img src="<%= account.image.url %>" id="profileImage"  style="height: 60%; width: 60%;">
                             <%}else{%>
                                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiZfk_mBRRAnMVpDjIrMbiU5DUxjWeZ5nqRQ&usqp=CAU" id="profileImage"  style="height: 200px; width: 200px;">
                             <%}%>
@@ -14,32 +14,18 @@
 
                 <div class="container bg-white mt-3 mb-0" style="min-height: 400px;">
                   <h6 style="text-align: center;"><sub>Username</sub></h6>
-                  <h2 style="font-weight: bold; text-align: center;"><%= currentUser.username %></h2>
-                  <h6>First Name: <%= currentUser.firstname %></h6>
-                  <h6>Last Name: <%= currentUser.lastname %></h6>
-                  <h6>Birthdate: <%= new Date(currentUser.birthday).toISOString().split('T')[0] %></h6>
-                  <h6>Address: <%= currentUser.country %>/<%= currentUser.city %></h6>
-                  <h6>Zipcode: <%= currentUser.zipcode %></h6>
-                  <h6>Contact Number: <%= currentUser.phonenumber %></h6>
-                  <h6>Email Address: <%= currentUser.email %></h6>
-                  <button type="button" class="btn btn-info mt-3"><a href="/renderProfileEdit" style="color: white; text-decoration: none;">Update profile</a></button>
-                </div>
-
-
-                <div  style="min-height: 250px;">
-                  <form action="/changePassword" method="POST" novalidate class="validated-form">
-                    <h5>Change Your Password</h5>
-                    <label for="oldPassword">Current Password:</label>
-                    <input  class="form-control" type="password" id="oldPassword" name="oldPassword" required>
-                    <label class="form-label" for="newPassword">New Password:</label>
-                      <input class="form-control" type="password" id="newPassword" name="newPassword" required>
-                      <div class="valid-feedback">
-                          Looks good!
-                      </div>
-                      <button class="btn btn-info">Save changes</button>
-                  </form>
+                  <h2 style="font-weight: bold; text-align: center;"><%= account.username %></h2>
+                  <h6>First Name: <%= account.firstname %></h6>
+                  <h6>Last Name: <%= account.lastname %></h6>
+                  <h6>Birthdate: <%= new Date(account.birthday).toISOString().split('T')[0] %></h6>
+                  <h6>Address: <%= account.country %>/<%= account.city %></h6>
+                  <h6>Zipcode: <%= account.zipcode %></h6>
+                  <h6>Contact Number: <%= account.phonenumber %></h6>
+                  <h6>Email Address: <%= account.email %></h6>
                   
                 </div>
+
+
             </div>
             <div class="col-1" style="backdrop-filter: blur(30px);">
                 
@@ -54,10 +40,10 @@
                   </h2>
                   <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body">
-                      <% if(currentUser.projects.length > 0) { %>
+                      <% if(account.projects.length > 0) { %>
                         <h4 style="margin-top: 10px;" class="text-muted">Your projects : </h4>
                         <div class="container-fluid mt-5">
-                                <% for(let project of currentUser.projects) {%>
+                                <% for(let project of projects) {%>
                                   
                                     <div class="card rounded mb-3">
                                       <div class="col">
@@ -67,8 +53,13 @@
                                             <div class="carousel-inner">
                                                 <% project.images.forEach((img, i) => {  %>
                                                 <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
-                                                  <a href="/project/<%=currentUser._id%>/<%=currentUser._id%>/<%=project._id%>">
+                                                  <% if(currentUser) {%>
+                                                  <a href="/projects/<%=project._id%>">
                                                     <img src="<%= img.url%>" class="d-block w-100" alt="<%=project.title%>'s Image" style="height: 300px;"></a>
+                                                    <% } else {%>
+                                                      <a href="/projects/<%=project._id%>">
+                                                        <img src="<%= img.url%>" class="d-block w-100" alt="<%=project.title%>'s Image" style="height: 300px;"></a>
+                                                      <% } %>
                                                 </div>
                                                 <% }) %>
                                 
@@ -87,10 +78,15 @@
                                       </div>
                                     <div class="row">
                                       <div class="card-body">
-                                        <a href="/project/<%=currentUser._id%>/<%=currentUser._id%>/<%=project._id%>" style="text-decoration: none; color: black;">
+                                        <% if(currentUser) {%>
+                                        <a href="/projects/<%=project._id%>" style="text-decoration: none; color: black;">
                                           <h5 class="card-title"><span class="text-muted">Title: </span><%= project.title %></h5>
                                         </a>
-                                        
+                                        <% } else {%>
+                                          <a href="/projects/<%=project._id%>" style="text-decoration: none; color: black;">
+                                            <h5 class="card-title"><span class="text-muted">Title: </span><%= project.title %></h5>
+                                          </a>
+                                          <% } %>
                                           <p class="card-text"><span class="text-muted">Info: </span><%=project.shortInfo%></p><br>
                                       </div>
                                     </div>
@@ -115,12 +111,6 @@
                                     %></li>
                                     <p><%=project.viewCounter%> view </p>
                                       </div>
-                                      <div class="card-body">
-                                        <a class="card-link btn btn-info" href="/proje/<%=currentUser._id%>/<%=project._id%>/edit">Edit</a>
-                                        <form class="d-inline" action="/project/<%=currentUser._id%>/<%=project._id%>?_method=DELETE" method="POST">
-                                            <button class="btn btn-danger">Delete</button>
-                                        </form>
-                                    </div>
                                     </div>
                                     
                                   </div>
@@ -141,7 +131,7 @@
                   </h2>
                   <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body">
-                      <% if(currentUser.campgrounds.length > 0) { %>
+                      <% if(campgrounds.length > 0) { %>
                         <h1 style="margin-top: 10px;">Your campgrounds : </h1>
                         <div class="container-fluid mt-5">
                                 <% for(let campground of campgrounds) {%>
@@ -202,12 +192,6 @@
                                     %></li>
                                     <p><%=campground.viewCounter%> view </p>
                                       </div>
-                                      <div class="card-body">
-                                        <a class="card-link btn btn-info" href="/campgrounds/<%=campground._id%>/edit">Edit</a>
-                                        <form class="d-inline" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
-                                            <button class="btn btn-danger">Delete</button>
-                                        </form>
-                                    </div>
                                     </div>
                                     
                                   </div>
@@ -228,7 +212,7 @@
                   </h2>
                   <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body">
-                      <% if(currentUser.products.length > 0) { %>
+                      <% if(products.length > 0) { %>
                         <h1 style="margin-top: 10px;">Your products : </h1>
                         <div class="container-fluid mt-5">
                                 <% for(let product of products) {%>
@@ -289,12 +273,6 @@
                                     %></li>
                                     <p><%=product.viewCounter%> view </p>
                                       </div>
-                                      <div class="card-body">
-                                        <a class="card-link btn btn-info" href="/products/<%=product._id%>/edit">Edit</a>
-                                        <form class="d-inline" action="/products/<%=product._id%>?_method=DELETE" method="POST">
-                                            <button class="btn btn-danger">Delete</button>
-                                        </form>
-                                    </div>
                                     </div>
                                     
                                   </div>
@@ -312,13 +290,8 @@
             </div>
             <div class="col-1" style="  backdrop-filter: blur(30px);">
             </div>
-            <div class="col-2 bg-white pt-5 border border-dark" style=" box-shadow: 10px 10px 50px 5px rgb(77, 78, 78);">
-              <h2>Add Project</h2>
-              <button class="btn btn-dark text-white"><a href="/addProject" style="color: white; text-decoration: none;">Add Project</a></button>
-              <h2>Add Campground</h2>
-              <button class="btn btn-dark text-white"><a href="/campgrounds/new" style="color: white; text-decoration: none;">Add Campground</a></button>
-              <h2>Add Product</h2>
-              <button class="btn btn-dark text-white"><a href="/products/new" style="color: white; text-decoration: none;">Add Product</a></button>
-              </div>
+            <div class="col-2 pt-5 border border-dark" style=" box-shadow: 10px 10px 50px 5px rgb(77, 78, 78); background-color: rgb(246, 247, 247);">
+              
+            </div>
         </div>
     </div>
