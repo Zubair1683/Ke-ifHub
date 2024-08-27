@@ -116,8 +116,8 @@
                                     <p><%=project.viewCounter%> view </p>
                                       </div>
                                       <div class="card-body">
-                                        <a class="card-link btn btn-info" href="/proje/<%=currentUser._id%>/<%=project._id%>/edit">Edit</a>
-                                        <form class="d-inline" action="/project/<%=currentUser._id%>/<%=project._id%>?_method=DELETE" method="POST">
+                                        <a class="card-link btn btn-info" href="/projects/<%=project._id%>/edit">Edit</a>
+                                        <form class="d-inline" action="/projects/<%=project._id%>?_method=DELETE" method="POST">
                                             <button class="btn btn-danger">Delete</button>
                                         </form>
                                     </div>

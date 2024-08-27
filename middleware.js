@@ -5,7 +5,7 @@ const Review = require('./models/review');
 const { projectSchema } = require('./schemas.js');
 const Account = require('./models/accounts');
 const Products = require('./models/products');
-
+const Projects = require('./models/projects');
 
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -46,14 +46,13 @@ module.exports.validateProject = (req, res, next) => {
     }
 }
 
-module.exports.isAccountAuthor = async (req, res, next) => {
-    //const { id } = req.params;
-    const { accountID, projectID } = req.params;
-    const account = await Account.findById(accountID);
-    const project = account.projects.id(projectID);
-    if (!project) {
+module.exports.isProjectAuthor = async (req, res, next) => {
+    const { id } = req.params;
+    console.log(id)
+    const project = await Projects.findById(id);
+    if (!project.id === req.user._id) {
         req.flash('error', 'You do not have permission to do that!');
-        return res.redirect(`/home`);
+        return res.redirect(`/projects/${id}`);
     }
     next();
 }

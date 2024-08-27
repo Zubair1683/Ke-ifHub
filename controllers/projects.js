@@ -3,95 +3,58 @@ const { cloudinary } = require("../cloudinary");
 const Review = require('../models/review');
 const Projects = require('../models/projects');
 
-
-
 module.exports.searchProject = async (req, res, next) => {
-     const searchedProject = req.body.search.toLowerCase();
-     const accounts = await Account.find({});
-     let orderedProjects = [];
-     let orderedtopProjects = [];
-    
-     // Step 1: Flatten the nested structure
-     for (const account of accounts) {
-         for (const project of account.projects) {
-             let myArray = project.title.toLowerCase().split(" ");
-             if(project.title.toLowerCase() == searchedProject || myArray.includes(searchedProject)) orderedProjects.push({ project, author: account.username, accountID: account._id });
- 
-             orderedtopProjects.push({ project, author: account.username, accountID: account._id });
-         }
-     }
-     orderedProjects = orderedProjects.length > 0 ? orderedProjects : null;
-     res.render(`search`, { orderedtopProjects, orderedProjects, accounts, webTitle: `home - searched => ${searchedProject}`, searchedText: req.body.search})
- }
+    const searchedProject = req.body.search.toLowerCase();
+    const projects = await Projects.find({}).populate('popupText');
+    let orderedProjects = [];
+    let orderedtopProjects = [];
+    // Step 1: Flatten the nested structure
+    for (const project of projects) {
+            let myArray = project.title.toLowerCase().split(" ");
+            const normalizedSearchProject = searchedProject.trim().toLowerCase();
 
- module.exports.displayProjectUserNotExists = async (req, res, next) => {
-    const { accountID, projectID } = req.params;
-    
-    // Find the account by ID
-    const account = await Account.findById(accountID);
-
-    // Find the project in the account's projects array by project ID and update its viewCounter
-    const project = account.projects.id(projectID);
-    if (!project) {
-        req.flash('error', 'Cannot find that project!');
-        return res.redirect(`/home`);
-    }
-    
-    // Update the comment images with the account's image if it exists
-    for(let review of project.reviews) {
-        const commentAccount = await Account.findOne({ username: review.username });
-        if (commentAccount && commentAccount.image) {
-            review.image = commentAccount.image;
-        }
-    }
-    
-    // Increase the GeneralviewCounter and mark the project as modified
-    project.generalViewCounter += 1;
-    const reviews = await Review.find({ id: project.id });
-    // Save the updated account
-    await account.save();
-    const projects = account.projects;
-
- // Return the updated project information to the client
- res.render('projectInfo', { project, webTitle: `${project.title}`, accountID, projects,reviews });
-   
+// Check if product.title matches the normalized searchProduct or is in myArray
+if (project.title.toLowerCase() === normalizedSearchProject || myArray.map(item => item.trim().toLowerCase()).includes(normalizedSearchProject)) {
+    orderedProjects.push(project);
 }
+    }
+    const accounts = await Account.find({});
+    orderedProjects = orderedProjects.length > 0 ? orderedProjects : null;
+    res.render(`projects/search`, { orderedtopProjects, orderedProjects, accounts, webTitle: `home - searched => ${searchedProject}`, searchedText: req.body.search})
+ }
 
 module.exports.displayProject = async (req, res, next) => {
     const project = await Projects.findById(req.params.id).populate();
     const reviews = await Review.find({ id: project._id });
     // Find the account by ID
     if (!project) {
-        req.flash('error', 'Cannot find that campground!');
+        req.flash('error', 'Cannot find that project!');
         return res.redirect('/projects');
     }
-    // Find the memebr by ID
-   /* const member = await Account.findById(id);
-    for(let review of project.reviews){
-        const account = await Account.findOne({ username: review.username});
+   if(reviews.length > 0){
+    for(let review of reviews){
+        const account = await Account.findOne({ username: review.author});
         if(account){
-            if(account.image)review.image = account.image;
+            if(account.image){
+                review.imageURL = account.image.url;
+                await review.save();
+            }
         }
     }
-
-    const user = { username: member.username, id: id };
-
-    // Check if the user is already in viewMembers
-    const hasViewed = project.viewMembers.some(viewer => viewer.id === id);
-    project.generalViewCounter += 1;
-    //const reviews = await Review.find({ id: project.id });
+}
+if(req.user){
+    const user = { username: req.user.username, id: req.user._id };
+    const hasViewed = project.viewMembers.some(viewer => viewer.id === req.user._id);
     if (!hasViewed) {
         project.viewCounter += 1;
         project.viewMembers.push(user);
-        
     }
-    await account.save();*/
+}
+project.generalViewCounter += 1;
+    await project.save();
+    
     const projects = await Projects.find({}).populate();
- // Return the updated project information to the client
- res.render('projects/projectInfo', { project, reviews, webTitle: "product.title",projects });
-
- //res.render('projectInfo', { project, webTitle: `${project.title}`, accountID, projects,reviews });
-   
+ res.render('projects/projectInfo', { project, reviews, webTitle: "product.title",projects, accountID: project.id });
 }
 
 module.exports.renderAddProject = async (req, res, next) => {
@@ -111,61 +74,94 @@ module.exports.createProject = async (req, res, next) => {
     res.redirect(`/projects/${newProject._id}`);
 }
 
-module.exports.editProject = async (req, res, next) => {
-    const { accountID, projectID } = req.params;
-    const account = await Account.findById(accountID);
-    const project = account.projects.id(projectID);
-    res.render('edit', { projectID, webTitle: `${project.title} => edit`, project });
+module.exports.renderEditProject = async (req, res, next) => {
+    const { id } = req.params;
+    const project = await Projects.findById(id)
+    if (!project) {
+        req.flash('error', 'Cannot find that project!');
+        return res.redirect('/projects');
+    }
+    res.render('projects/edit', { projectID: id, webTitle: `${project.title} => edit`, project });
 }
 
 module.exports.updatePoject = async (req, res, next) => {
-    const { accountID, projectID } = req.params;
-    // Find the account by ID
-    const account = await Account.findById(accountID);
+    const { id } = req.params;
+    const { project } = req.body;
 
-    // Find the project in the account's projects array by project ID
-    const project = account.projects.id(projectID);
+    // Find the account by the current user's ID
+    const account = await Account.findById(req.user._id);
+
+    // Find the campground by its ID and update it
+    const updatedProject = await Projects.findByIdAndUpdate(id, { ...project }, { new: true });
+
+
+    // Add new images to the campground
     const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
-    // Update project properties based on request body
-    project.title = req.body.title;
-    project.shortInfo = req.body.shortInfo;
-    project.images.push(...imgs);
-    project.info = req.body.info;
+    updatedProject.images.push(...imgs);
 
+    // Save the updated campground
+    await updatedProject.save();
+
+    // If there are images to delete, remove them from both Cloudinary and the campground
     if (req.body.deleteImages) {
         for (let filename of req.body.deleteImages) {
             await cloudinary.uploader.destroy(filename);
         }
-        project.images = project.images.filter(image => !req.body.deleteImages.includes(image.filename));
+        await updatedProject.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } });
     }
 
-    // Save the updated account (which includes the updated project)
-    await account.save();
-   
-    req.flash('success', 'Successfully updated the project!');
-    // Redirect to the account's page or any other desired route
-    res.redirect(`/project/${accountID}/${accountID}/${projectID}`);
+    // Update the campground in the account's campgrounds array
+    const accountProjectIndex = account.projects.findIndex(camp => camp._id.toString() === id);
+    if (accountProjectIndex !== -1) {
+        // Replace the old campground with the updated one
+        account.projects[accountProjectIndex] = updatedProject;
+        await account.save(); // Save the updated account
+    }
+
+    req.flash('success', 'Successfully updated project!');
+    res.redirect(`/projects/${updatedProject._id}`);
 }
 
 module.exports.deleteProject = async (req, res, next) => {
-    const { accountID, projectID } = req.params;
+    const { id } = req.params;
 
-    // Find the account by ID
-    const account = await Account.findById(accountID);
+    // Find the campground to delete
+    const project = await Projects.findById(id)
 
-    // Use Mongoose array pull method to remove the project from the array
-    account.projects.pull({ _id: projectID });
+    if (!project) {
+        req.flash('error', 'Project not found');
+        return res.redirect('/projects');
+    }
 
-    // Save the account (which includes removing the project from the array)
+    // Find the account of the currently logged-in user
+    const account = await Account.findById(req.user._id);
+
+    if (!account) {
+        req.flash('error', 'Account not found');
+        return res.redirect('/projects');
+    }
+
+    // Remove the campground from the account's campgrounds array
+    account.projects = account.products.filter(pro => pro._id.toString() !== id);
     await account.save();
-    req.flash('success', 'Successfully deleted the project!');
-    res.redirect(`/myAccount`)
-}
+// Optionally, delete associated images from Cloudinary if you have image URLs stored
+    // For example, you may need to delete images as follows:
+    if (project.images) {
+        for (let image of project.images) {
+            await cloudinary.uploader.destroy(image.filename);
+        }
+    }
 
+    // Delete the campground document
+    await Projects.findByIdAndDelete(id);
+
+    
+    req.flash('success', 'Successfully deleted project');
+    res.redirect('/projects');
+}
 
 module.exports.renderProjects = async (req, res, next) => {
     const accounts = await Account.find({});
-    //console.log(accounts[0])
     let orderedProjects = [];
   
     for (const account of accounts) {

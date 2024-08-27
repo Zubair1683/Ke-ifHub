@@ -27,9 +27,9 @@
       </div> 
       </div>
       <div class="ProjectVInfo">
-        <h1 class="normal"><%=project.shortInfo%></h1>
+        <h1 class="normal"><%=project.description.slice(0,50)%>...</h1>
 
-        <p class="hide"><%=project.info%></p>
+        <p class="hide"><%=project.description%></p>
         <button class="infobutton">Info <i class="fa fa-refresh"></i></button>
       </div>
     </div>
@@ -60,18 +60,22 @@
                     Looks good!
                 </div>
             </div>
-            <button class="btn btn-success">Submit</button>
+            <button class="btn btn-info">Send</button>
             </form>
             <% } else {%>
               <div>
-
+                  <h5>You should <a href="/login" class="text-muted">login</a>  firstly!!!</h5>
               </div>
               <% }%>
           
         </div>
         <div class="allComments">
-          <h2>All comments</h2><br>
+          
           <div id="allComments">
+            <% if(reviews.length <= 0){%>
+              <h2>No comment exists</h2>
+              <%}else{%>
+                <h2>All comments</h2><br>
             <ul>
               <% for(let review of reviews) { %>
               <li><% if(review.imageURL){%>
@@ -83,7 +87,6 @@
                 Rated: <%= review.rating %> stars
             </p>
               <li><%= review.body %></li>
-
               <li class="text-muted"><% 
                 const currentDate = new Date();
                 const commentDate = new Date(review.date);
@@ -100,13 +103,15 @@
                   %><%= diffMinutes %> minutes ago<%
                 }
               %></li><br>
-              <% if(currentUser && (currentUser._id == accountID || review.username === currentUser.username)) {%>
+              
+              <% if(currentUser && (currentUser._id.toString() === review.accountId.toString() || review.username === currentUser.username)) {%>
                 <form action="/projects/<%=project._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
                   <button class="btn btn-sm btn-danger">Delete</button>
               </form>
                 <% } %>
                 <hr>
               <% }%>
+              <% } %>
           </ul>
           </div>
         </div>
@@ -116,9 +121,13 @@
       <div class="ProjectRec">
         <h1>Recommended project</h1><hr><br>
         <% for(let project of projects){ %>
-         
+          <% url3=`/goToProfile/${project.id}`; %>
+    <% if(currentUser && project.id.toString() === currentUser._id.toString()){%>
+        <% url3=`/profile`; %>
+        <%}%>
             <a href="/projects/<%=project._id%>" style="text-decoration: none; color: black;">
                     <h5 class="card-title"><%= project.title %></h5>
+                    <li class="text-muted">By: <a href=<%=url3 %> style="text-decoration:none; color:grey"><%= project.author %></a>
                   </a><hr>
           <% }%>
         <div>

@@ -8,8 +8,6 @@ const Review = require('../models/review');
 
 module.exports.index = async (req, res) => {
     const products = await Products.find({}).populate('popupText');
-    //console.log(products)
-    //console.log(products.length)
     res.render('products/index', { products, webTitle: "products"})
 }
 
@@ -60,6 +58,18 @@ module.exports.createProduct = async (req, res, next) => {
 module.exports.showProducts = async (req, res,) => {
     const product = await Products.findById(req.params.id).populate();
     const reviews = await Review.find({ id: product._id });
+  
+    if(reviews.length > 0){
+        for(let review of reviews){
+            const account = await Account.findOne({ username: review.author});
+            if(account){
+                if(account.image){
+                    review.imageURL = account.image.url;
+                    await review.save();
+                }
+            }
+        }
+    }
     if (!product) {
         req.flash('error', 'Cannot find that campground!');
         return res.redirect('/campgrounds');

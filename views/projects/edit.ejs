@@ -2,25 +2,17 @@
 <div class="row">
     <h1 class="text ml-5 mb-3">Edit project</h1>
     <div class="col-4 offset-1">
-        <form action="/project/<%=currentUser._id%>/<%=projectID%>?_method=PUT" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+        <form action="/projects/<%=projectID%>?_method=PUT" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
-                <input class="form-control" type="text" id="title" name="title" value="<%=project.title %>" required>
+                <input class="form-control" type="text" id="title" name="project[title]" value="<%=project.title %>" required>
                 <div class="valid-feedback">
                     Looks good!
                 </div>
             </div>
             <div class="mb-3">
-                <label class="form-label" for="shortInfo">Short Info</label>
-                <input class="form-control" type="text" id="shortInfo" name="shortInfo" value="<%=project.shortInfo %>" required>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-            </div>
-            
-            <div class="mb-3">
-                <label class="form-label" for="info">Detailed Info</label>
-                <textarea class="form-control" type="text" id="info" name="info" required><%=project.info %></textarea>
+                <label class="form-label" for="description">Description</label>
+                <textarea class="form-control" type="text" id="description" name="project[description]" required><%=project.description %></textarea>
                 <div class="valid-feedback">
                     Looks good!
                 </div>

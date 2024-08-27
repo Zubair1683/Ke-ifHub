@@ -2,6 +2,7 @@ const Account = require('../models/accounts');
 const Campground = require('../models/campground');
 const Products = require('../models/products');
 const Projects = require('../models/projects');
+const Review = require('../models/review');
 
 
 module.exports.renderRegister = (req, res) => {
@@ -151,20 +152,16 @@ module.exports.home = async (req, res, next) => {
                 }
                 return totalReviews > 0 ? (sumOfRating / totalReviews + totalReviews) : 0;
             }
-            return new Date(0); // Return a very old date if no date is found
+            return new Date(0); 
         };
-        // Calculate the average rating
         item.averageRating = getDateAvR(item);
-        // console.log(project.averageRating, project.project.title)
     });
 
-    // Step 2: Sort the projects based on the average rating
     orderedRecProjects = packageSort(orderedRecProjects, 'averageRating');
     orderedAll = packageSort(orderedAll, 'date');
     orderedtopProjects = packageSort(orderedtopProjects, 'viewCounter');
     orderedTrendProjects = packageSort(orderedTrendProjects, 'GeneralviewCounter')
 
-    // Remove the averageRating property if you don't want it in the final sorted array
     orderedRecProjects.forEach(project => {
         delete project.averageRating;
     });
@@ -177,17 +174,65 @@ module.exports.home = async (req, res, next) => {
     res.render(`users/home`, { orderedtopProjects, orderedAll, orderedTrendProjects, orderedRecProjects, accounts, webTitle: "Home" });
 }
 
+module.exports.goToProfile = async(req, res) => {
+    const { accountID } = req.params;
+    const account = await Account.findById(accountID);
+    const campgrounds = await Campground.find({ id: accountID });
+    const products = await Products.find({ id: accountID });
+    const projects = await Projects.find({ id: accountID });
+    res.render('users/goToProfile', { webTitle: "Profile",  campgrounds, products, account,projects})
+}
+
+module.exports.renderForgotPassword = (req, res) => {
+    res.render('users/forgotPassword', { webTitle: "forgotPassword"})
+}
+
+module.exports.forgotPassword = async (req, res) => {
+    try {
+        let { username, phonenumber, password } = req.body;
+        const user = await Account.findOne({ username, phonenumber });
+
+        if (!user) {
+            req.flash('error', 'User not found.');
+            return res.redirect('/login');
+        }
+
+        let { firstname, lastname, country, city, zipcode, birthday, email } = user;
+        const campgrounds = await Campground.find({ id: user._id });
+        const products = await Products.find({ id: user._id });
+        const projects = await Projects.find({ id: user._id });
+
+         await Account.deleteOne({ _id: user._id });
+        const newUser = new Account({ firstname, lastname, phonenumber, country, city, zipcode, birthday, email, username,campgrounds, products,projects });
+        const registeredUser = await Account.register(newUser, password);
+
+        await Campground.updateMany({ id: user._id }, { $set: { id: newUser._id } });
+        await Products.updateMany({ id: user._id }, { $set: { id: newUser._id } });
+        await Projects.updateMany({ id: user._id }, { $set: { id: newUser._id } });
+        await Review.updateMany({ accountId: user._id }, { $set: { accountId: newUser._id } });
+         
+        req.login(registeredUser, err => {
+            if (err) return next(err);
+            req.flash('success', 'Welcome back to Keşif Hub!');
+            res.redirect('/home');
+        })
+    } catch (err) {
+        console.error(err);
+        req.flash('error', 'An error occurred while changing the password.');
+        res.redirect('/forgotPassword');
+    }
+}
 
 module.exports.search = async (req, res, next) => {
-    // const { id } = req.params;
     const searched = req.body.search.toLowerCase();
     const accounts = await Account.find({});
     const campgrounds = await Campground.find({}).populate('popupText');
     const products = await Products.find({}).populate('popupText');
     const projects = await Projects.find({}).populate('popupText');
     let ordered = [];
-    // Step 1: Flatten the nested structure
-    for (const account of accounts) {
+    
+    //for (const account of accounts) {
+        
         for (const project of projects) {
             let myArray = project.title.toLowerCase().split(" ");
             const normalizedSearchProduct = searched.trim().toLowerCase();
@@ -208,12 +253,12 @@ module.exports.search = async (req, res, next) => {
             let myArray = product.title.toLowerCase().split(" ");
             const normalizedSearchProduct = searched.trim().toLowerCase();
             const account1 = await Account.findById(product.id);
-            // Check if product.title matches the normalized searchProduct or is in myArray
             if (normalizedSearchProduct !== "" && product.title.toLowerCase() === normalizedSearchProduct || myArray.map(item => item.trim().toLowerCase()).includes(normalizedSearchProduct)) {
                 ordered.push({ product, author: account1.username, accountID: account1._id });
             }
         }
-    }
+    //}
+
     ordered = packageSort(ordered, 'date');
     ordered = ordered.length > 0 ? ordered : null;
     res.render(`users/search`, { ordered, accounts, searchedText: req.body.search, webTitle: "Home" })
@@ -227,10 +272,7 @@ module.exports.logout = (req, res) => {
 
 const filter = (project) => {
     if (project.length < 10) {
-        // Calculate the new length (half of the original length)
         const newLength = Math.ceil(project.length / 2);
-
-        // Slice the array to keep only the first `newLength` elements
         return project = project.slice(0, newLength);
     }
     else {
@@ -246,22 +288,20 @@ const packageSort = (items, element) => {
                 if (item.product) return new Date(item.product.date);
                 if (item.campground) return new Date(item.campground.date);
                 if (item.project) return new Date(item.project.date);
-                return 0; // Default to 0 if no view counter is found
+                return 0; 
             };
-
         } else {
             getValue = (item) => {
                 if (item.product) return item.product[element] || 0;
                 if (item.campground) return item.campground[element] || 0;
                 if (item.project) return item.project[element] || 0;
-                return 0; // Default to 0 if no view counter is found
+                return 0;
             };
         }
-
 
         const counterA = getValue(a);
         const counterB = getValue(b);
 
-        return counterB - counterA; // Sort by descending view count
+        return counterB - counterA;
     });
 };

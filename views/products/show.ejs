@@ -99,7 +99,7 @@
             <% for(let review of reviews) { %>
                 <% url3=`/goToProfile/${review.accountId}`; %>
                 <% if(currentUser && review.accountId.toString() === currentUser._id.toString()){%>
-                    <% url3=`/prof`; %>
+                    <% url3=`/profile`; %>
                     <%}%>
                 <div class="card mb-3 ">
                 <div class="card-body">
@@ -113,6 +113,22 @@
                 <%}%>
                      <h6 class="card-subtitle mb-2 text-muted">By <a href=<%=url3 %> style="text-decoration:none; color:grey"><%= review.author%></a></h6>
                     <p class="card-text">Review: <%= review.body %></p>
+                    <li class="text-muted"><% 
+                const currentDate = new Date();
+                const commentDate = new Date(review.date);
+                const diffMs = currentDate - commentDate; // Difference in milliseconds
+                const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+                
+                if (diffDays > 0) {
+                  %><%= diffDays %> days ago<%
+                } else if (diffHours > 0) {
+                  %><%= diffHours %> hours ago<%
+                } else {
+                  %><%= diffMinutes %> minutes ago<%
+                }
+              %></li><br>
                     <%  if( currentUser && review.author === currentUser.username)  {%>
                     <form action="/products/<%=product._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
                         <button class="btn btn-sm btn-danger">Delete</button>

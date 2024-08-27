@@ -42,22 +42,6 @@
                 </div>
             </div>
             <div class="mb-3">
-                <label class="form-label" for="shortInfo">Short Info</label>
-                <textarea class="form-control" type="text" id="shortInfo" name="campground[shortInfo]"
-                    required><%= campground.shortInfo%></textarea>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="info">Detailed Info</label>
-                <textarea class="form-control" type="text" id="info" name="campground[info]"
-                    required><%= campground.info%></textarea>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-            </div>
-            <div class="mb-3">
                 <div class="form-file custom-file">
                     <input type="file" class="form-file-input" id="image" name="image" multiple>
                     <label class="form-file-label" for="image">
@@ -80,7 +64,5 @@
                 <button class="btn btn-info">Update Campground</button>
             </div>
         </form>
-        <a href="/campgrounds/<%= campground._id%>">Back To Campground</a>
-
     </div>
 </div>
