@@ -118,7 +118,6 @@ h4 {
 /* Styles for project recommendations */
 .ProjectRec {
     background-color: #e5e5e55d;
-    min-height: 300px;
     width: 30%;
     border: 2px dotted rgb(192, 192, 192);
     border-radius: 10px;
@@ -152,7 +151,6 @@ h4 {
 .allComments {
     background-color: #e5e5e55d;
     min-height: 300px;
-    padding: 20px 20px;
     border: 2px dotted rgb(192, 192, 192);
     border-radius: 10px;
 }
@@ -182,7 +180,12 @@ h4 {
 label {
     font-weight: bold;
 }
-
+#reco {
+    width: 30%;
+    border: 2px dotted rgb(192, 192, 192);
+    border-radius: 10px;
+    padding: 10px 20px;
+}
 textarea {
     margin-top: 10px;
 }
@@ -225,10 +228,10 @@ textarea {
         margin-bottom: 20px;
     }
 
-    .allComments {
-        min-height: 250px;
+    
+    #reco {
+        width: 90%;
     }
-
     .addComment {
         min-height: 260px;
         margin-bottom: 10px;
@@ -278,15 +281,18 @@ textarea {
         width: 30%;
     }
 
-    .ProjectVInfo {
-        width: 90%;
-    }
+    
 }
 
 @media screen and (max-width:600px) {
     main {
         margin-top: 20%;
     }
+    .allComments {
+        min-height: 250px;
+        padding: 10px 10px;
+    }
+    
 }
 
 /* Style emoji button*/

@@ -1,22 +1,23 @@
 <% layout('./layouts/boilerplate2')%>
-<h1><%=currentUser.username%></h1>
+    <form action="/updateProfile" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+        <div class="container mb-5" style="min-height: 800px; padding: 0;">
+            <div class="rounded-top" style="background-color: rgb(120, 176, 200); height: 7%;">
+                <h3 style="padding-top: 5px; padding-left: 5px; color: azure;">Edit you profile</h3>
+            </div>
+            <div class="rounded-bottom">
+                <div class="row col-md" style=" margin: 10px;">
+                    <div class="row-3 col-md-3 bg-white rounded-bottom"
+                        style=" box-shadow: 10px 10px 50px 5px rgb(77, 78, 78);">
+                        <div class="container d-flex justify-content-center mt-3 mb-3">
+                            <% if(currentUser.image){%>
+                                <img src="<%= currentUser.image.url %>" id="profileImage"
+                                    style="height: 200px; width: 200px;">
+                                <%}else{%>
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiZfk_mBRRAnMVpDjIrMbiU5DUxjWeZ5nqRQ&usqp=CAU"
+                                        id="profileImage" style="height: 200px; width: 200px;">
+                                    <%}%>
+                        </div>
 
-<form action="/updateProfile" method="POST"  novalidate class="validated-form" enctype="multipart/form-data">
-    <div class="container mb-5" style="height: 800px; padding: 0;">
-        <div class="rounded-top" style="background-color: rgb(120, 176, 200); height: 7%;">
-            <h3 style="padding-top: 5px; padding-left: 5px; color: azure;">Edit you profile</h3>
-        </div>
-        <div class="rounded-bottom" style="height: 90%;">
-            <div class="row" style="height: 100%; margin: 0;">
-                <div class="col-3 bg-white rounded-bottom" style=" box-shadow: 10px 10px 50px 5px rgb(77, 78, 78);">
-                    <div class="container d-flex justify-content-center mt-3 mb-3">
-                        <% if(currentUser.image){%>
-                            <img src="<%= currentUser.image.url %>" id="profileImage"  style="height: 60%; width: 60%;">
-                            <%}else{%>
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiZfk_mBRRAnMVpDjIrMbiU5DUxjWeZ5nqRQ&usqp=CAU" id="profileImage"  style="height: 200px; width: 200px;">
-                            <%}%>
-                    </div>
-                    
                         <label for="">Change image:</label>
                         <div class="form-file custom-file">
                             <input type="file" class="form-file-input" id="image" name="image">
@@ -25,86 +26,98 @@
                                 <span class="form-file-button">Add</span>
                             </label>
                         </div>
-                </div>
-                <div class="col-1 rounded-bottom" style="background-color: rgb(246, 246, 246);  backdrop-filter: blur(10px);"></div>
-                <div class="col-8 bg-white rounded-bottom p-5" style=" box-shadow: 10px 10px 50px 5px rgb(77, 78, 78);">
-                    <h5>Personal</h5><hr>
-                    <div class="d-flex mt-4">
-                    <label class="form-label" for="firstname" style="width: 20%;">First name:</label>
-                    <input class="form-control" type="text" id="firstname" name="firstname" value="<%=currentUser.firstname %>" required style="width: 50%; margin-left: 10%;">
-                    <div class="valid-feedback">
-                        Looks good!
                     </div>
-                    </div>
-                    <div class="d-flex mt-4">
-                        <label class="form-label" for="lastname" style="width: 20%;">Last name:</label>
-                        <input class="form-control" type="text" id="lastname" name="lastname" value="<%=currentUser.lastname %>" required style="width: 50%; margin-left: 10%;">
-                        <div class="valid-feedback">
-                            Looks good!
-                        </div>
-                        </div>
+                    <div class="row-1 col-md-1 rounded-bottom"
+                        style="background-color: rgb(246, 246, 246);  backdrop-filter: blur(10px);"></div>
+                    <div class="row-8 col-md-8 bg-white rounded-bottom p-5"
+                        style=" box-shadow: 10px 10px 50px 5px rgb(77, 78, 78);">
+                        <h5>Personal</h5>
+                        <hr>
                         <div class="d-flex mt-4">
-                            <label class="form-label" for="email" style="width: 20%;">Email address:</label>
-                            <input class="form-control" type="email" id="emaill" name="email" value="<%=currentUser.email %>" required style="width: 50%; margin-left: 10%;">
+                            <label class="form-label" for="firstname" style="width: 20%;">First name:</label>
+                            <input class="form-control" type="text" id="firstname" name="firstname"
+                                value="<%=currentUser.firstname %>" required style="width: 50%; margin-left: 10%;">
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
+                        </div>
+                        <div class="d-flex mt-4">
+                            <label class="form-label" for="lastname" style="width: 20%;">Last name:</label>
+                            <input class="form-control" type="text" id="lastname" name="lastname"
+                                value="<%=currentUser.lastname %>" required style="width: 50%; margin-left: 10%;">
+                            <div class="valid-feedback">
+                                Looks good!
                             </div>
-                            <div class="d-flex mt-4">
-                                <label class="form-label" for="phone" style="width: 20%;">Phone number:</label>
-                                <input class="form-control" type="tel" id="phone" name="phonenumber" value="<%=currentUser.phonenumber %>" required style="width: 50%; margin-left: 10%;">
+                        </div>
+                        <div class="d-flex mt-4">
+                            <label class="form-label" for="email" style="width: 20%;">Email address:</label>
+                            <input class="form-control" type="email" id="emaill" name="email"
+                                value="<%=currentUser.email %>" required style="width: 50%; margin-left: 10%;">
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                        <div class="d-flex mt-4">
+                            <label class="form-label" for="phone" style="width: 20%;">Phone number:</label>
+                            <input class="form-control" type="tel" id="phone" name="phonenumber"
+                                value="<%=currentUser.phonenumber %>" required style="width: 50%; margin-left: 10%;">
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <div style="width: 30%;">
+                                <label class="form-label" for="country1">Country:</label>
+                                <input class="form-control" type="text" id="country1" name="country"
+                                    value="<%=currentUser.country %>" required>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
-                                </div>
-                                <div class="d-flex justify-content-between mt-4">
-                                    <div style="width: 30%;">
-                                        <label class="form-label" for="country1">Country:</label>
-                                    <input class="form-control" type="text" id="country1" name="country" value="<%=currentUser.country %>" required>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                </div>
-                    
-                                    <div style="width: 30%;">
-                                        <label class="form-label" for="city">City:</label>
-                                    <input class="form-control" type="text" id="city" name="city" value="<%=currentUser.city %>" required>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                    </div>
-                    
-                                    <div style="width: 20%;">
-                                        <label class="form-label" for="zipcode">Zip code:</label>
-                                    <input class="form-control" type="text" id="zipcode" name="zipcode" value="<%=currentUser.zipcode %>" required>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                </div>
-                                    
-                                    </div>
+                            </div>
 
-                                    <div class="d-flex justify-content-between mt-4 mb-5">
-                                        <div style="width: 30%;">
-                                            <label for="birthday" style="margin-bottom: 10px;">Birthday:</label><br>
-                                            <input type="date" id="birthday" name="birthday" value="<%= new Date(currentUser.birthday).toISOString().split('T')[0] %>" required>
-                                        </div>
-                                            <div style="width: 50%;">
-                                                <label class="form-label" for="username">Username:</label>
-                                            <input class="form-control" type="text" id="username" name="username" value="<%=currentUser.username %>" required>
-                                            <div class="valid-feedback">
-                                                Looks good!
-                                            </div>
-                                        </div>
-                                       
-                                        </div>
-                                    
-                    <button class="btn btn-info">Save changes</button>
-                
+                            <div style="width: 30%;">
+                                <label class="form-label" for="city">City:</label>
+                                <input class="form-control" type="text" id="city" name="city"
+                                    value="<%=currentUser.city %>" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+
+                            <div style="width: 20%;">
+                                <label class="form-label" for="zipcode">Zip code:</label>
+                                <input class="form-control" type="text" id="zipcode" name="zipcode"
+                                    value="<%=currentUser.zipcode %>" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4 mb-5">
+                            <div style="width: 30%;">
+                                <label for="birthday" style="margin-bottom: 10px;">Birthday:</label><br>
+                                <input type="date" id="birthday" name="birthday"
+                                    value="<%= new Date(currentUser.birthday).toISOString().split('T')[0] %>" required>
+                            </div>
+                            <div style="width: 50%;">
+                                <label class="form-label" for="username">Username:</label>
+                                <input class="form-control" type="text" id="username" name="username"
+                                    value="<%=currentUser.username %>" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <button class="btn btn-info">Save changes</button>
+
+                    </div>
                 </div>
+
             </div>
-        
+
         </div>
-    
-    </div>
-</form>
+    </form>

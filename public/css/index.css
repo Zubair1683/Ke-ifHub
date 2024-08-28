@@ -32,6 +32,19 @@ main {
     padding-left: 20px;
     padding-right: 20px;
 }
+.short-height {
+    height: 400px; /* Default height for larger devices */
+    margin-bottom: 70px;
+  }
+  
+  @media (max-width: 575.98px) { /* Target devices smaller than 576px */
+    .short-height {
+      height: 300px; /* Shorter height for small devices */
+      margin-bottom: 200px;
+      font-size: 12px;
+      
+    }
+  }
 #searchbackground {
         background-image: url('https://www.shutterstock.com/image-photo/businessman-holding-light-bulb-illuminate-260nw-1840845517.jpg'); /* Replace with the path to your image */
         background-size: cover; /* Ensure the background image covers the entire container */
@@ -47,7 +60,7 @@ main {
         background-size: cover; /* Ensure the background image covers the entire container */
         background-position: center; /* Center the background image */
         background-repeat: no-repeat; /* Prevent the image from repeating */
-        border-radius: 100px;
+        border-radius: 50%;
        /*opacity: 0.7;*/
 }
 
@@ -153,5 +166,9 @@ main {
     .projectPhoto,
     .projectPhoto img {
         width: 100%;
+    }
+    
+    .viewSection {
+        width: 85%;
     }
 }

@@ -51,7 +51,7 @@ module.exports.renderProfile = async(req, res) => {
     const campgrounds = await Campground.find({ id: req.user._id });
     const products = await Products.find({ id: req.user._id });
     const projects = await Projects.find({ id: req.user._id });
-    
+    console.log(req.user)
     res.render('users/profile', { webTitle: "Profile",  campgrounds, products, projects})
 }
 
@@ -202,9 +202,12 @@ module.exports.forgotPassword = async (req, res) => {
         const products = await Products.find({ id: user._id });
         const projects = await Projects.find({ id: user._id });
 
-         await Account.deleteOne({ _id: user._id });
+const image = user.image;
+await Account.deleteOne({ _id: user._id });
         const newUser = new Account({ firstname, lastname, phonenumber, country, city, zipcode, birthday, email, username,campgrounds, products,projects });
+        newUser.image = image
         const registeredUser = await Account.register(newUser, password);
+        
 
         await Campground.updateMany({ id: user._id }, { $set: { id: newUser._id } });
         await Products.updateMany({ id: user._id }, { $set: { id: newUser._id } });

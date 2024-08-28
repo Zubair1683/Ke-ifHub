@@ -60,28 +60,30 @@
   </div>
 
 
-  <div class="container">
+  <div class="container-fluid p-0 px-md-5">
     <main id="homebackground">
-      <div class="projects">
+      <div class="container m-3">
         <% if(orderedProjects) {%>
           <% for(let project of orderedProjects) {%>
             <% url3=`/goToProfile/${project.accountID}`; %>
     <% if(currentUser && project.accountID.toString() === currentUser._id.toString()){%>
         <% url3=`/profile`; %>
         <%}%>
-            <h2>"<%= project.project.title %>" is published by <a href=<%=url3 %> style="text-decoration:none; color:grey"><%= project.author %></a>
-            </h2>
-            <div class="project">
+        <div class="container-fluid p-0">
+          <h5 style="text-align: justify;"><%= project.project.title %></h5>
+          <small class="text-muted">published by <a href=<%=url3 %> style="text-decoration:none; color:grey;"><%= project.author %></a></small>
+          </div>
+            <div class="container-fluid p-0 short-height">
               <div class="card rounded">
                 <div class="row">
 
-                      <div class="col" id="imag">
+                      <div class="col px-0" id="imag">
                       <a href="/projects/<%=project.project._id%>">
                         <img src="<%= project.project.images[0].url%>" class="d-block w-100"
                           alt="<%=project.project.title%>'s Image" style="height: 400px;">
                       </a>
                   </div>
-                  <div class="col-4">
+                  <div class="col-5 col-md-4 px-0">
                     <div class="card-body" style="height: 90%">
                       <a href="/projects/<%=project.project._id%>"
                         style="text-decoration: none; color: black;">
@@ -107,11 +109,11 @@
                       <hr>
                       
                         <p class="card-text"><span class="text-muted">Info: </span>
-                          <%=project.project.description.slice(0, 20)%>
+                          <%=project.project.description.slice(0, 50)%>...
                         </p>
                         
                       </div>
-                      <div class="card-footer text-muted w-100 mt-auto">
+                      <div class="card-footer text-muted w-100 mt-auto bg-white">
                         <p style="margin: 0; font-size: smaller;">
                           <%=project.project.viewCounter%> view
                         </p>

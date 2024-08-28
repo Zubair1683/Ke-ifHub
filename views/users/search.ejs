@@ -25,18 +25,18 @@
                 <% project.project = project.product%>
                 <% page = "products"%>
                 <% } %>
-            <div class="project">
+            <div class="container-fluid p-0 short-height">
               <div class="card rounded">
-                <div class="col">
+                <div class="row">
                   
-                  <div class="row" id="imag">
+                  <div class="col d-flex justify-content-center align-items-center" id="imag">
                     
                       <div id="campgroundCarousel" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner">
                             <% project.project.images.forEach((img, i) => {  %>
                             <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
                               <a href="/<%=page%>/<%=project.project._id%>">
-                                <img src="<%= img.url%>" class="d-block w-100" alt="<%=project.project.title%>'s Image" style="height: 300px;"></a>
+                                <img src="<%= img.url%>" class="d-block w-100" alt="<%=project.project.title%>'s Image" style="min-height: 300px; max-height: 400px;"></a>
                             </div>
                             <% }) %>
             
@@ -53,23 +53,21 @@
                         <% } %>
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="col-6 col-md-4">
                     <div class="card-body" style="min-height: 185px;">
                       <a href="/<%=page%>/<%=project.project._id%>"
                         style="text-decoration: none; color: black;">
-                        <h5 class="card-title">
+                        <h5 class="card-title" style="display: inline; cursor: pointer; font-size: 1.2em; text-align: justify;">
                           <%= project.project.title %>
                         </h5>
-                        <li class="text-muted">Author: <%= project.author %>
+                        <li class="text-muted" style=" font-size: 0.8rem; text-align: justify;">Author: <a href=<%=url3 %> style="text-decoration:none; color:grey;"><%= project.author %></a>
                         </li>
                       </a>
-                          <p class="card-text"><span class="text-muted">Info: </span>
+                          <p class="card-text"><span class="text-muted">Description: </span>
                             <%=project.project.description.slice(0, 50)%>...
                           </p>
                       </div>
-                    </div>
-                    <div class="row">
-                      <div class="card-footer text-muted w-100">
+                      <div class="card-footer text-muted w-100 mt-auto bg-white">
                         <p>
                           <%=project.project.viewCounter%> view <br>
                             <hr>

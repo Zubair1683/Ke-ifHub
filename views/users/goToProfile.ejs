@@ -1,11 +1,11 @@
 <% layout('./layouts/boilerplate2')%>
     <div class="container mt-5 mb-5">
-        <div class="row padding-2">
-            <div class="col-3 bg-white border-2 border-dark" style=" box-shadow: 10px 10px 50px 5px rgb(77, 78, 78);">
+        <div class="row col-md p-2">
+            <div class="row-3 col-md-3 bg-white border-2 border-dark" style=" box-shadow: 10px 10px 50px 5px rgb(77, 78, 78);">
                     <div class="container d-flex justify-content-center mt-3">
                       
                         <% if(account.image){%>
-                            <img src="<%= account.image.url %>" id="profileImage"  style="height: 60%; width: 60%;">
+                            <img src="<%= account.image.url %>" id="profileImage"  style="height: 200px; width: 200px;">
                             <%}else{%>
                                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiZfk_mBRRAnMVpDjIrMbiU5DUxjWeZ5nqRQ&usqp=CAU" id="profileImage"  style="height: 200px; width: 200px;">
                             <%}%>
@@ -27,10 +27,10 @@
 
 
             </div>
-            <div class="col-1" style="backdrop-filter: blur(30px);">
+            <div class="row-1 col-md-1" style="backdrop-filter: blur(30px);">
                 
             </div>
-            <div class="col-5  bg-white border border-dark" style=" box-shadow: 10px 10px 50px 5px rgb(77, 78, 78);">
+            <div class="row-5 col-md-5  bg-white border border-dark" style=" box-shadow: 10px 10px 50px 5px rgb(77, 78, 78);">
               <div class="accordion accordion-flush" id="accordionFlushExample">
                 <div class="accordion-item">
                   <h2 class="accordion-header" id="flush-headingOne">
@@ -288,9 +288,9 @@
               </div>
                
             </div>
-            <div class="col-1" style="  backdrop-filter: blur(30px);">
+            <div class="row-1 col-md-1" style="  backdrop-filter: blur(30px);">
             </div>
-            <div class="col-2 pt-5 border border-dark" style=" box-shadow: 10px 10px 50px 5px rgb(77, 78, 78); background-color: rgb(246, 247, 247);">
+            <div class="row-2 col-md-2 pt-5 border border-dark" style=" box-shadow: 10px 10px 50px 5px rgb(77, 78, 78); background-color: rgb(246, 247, 247);">
               
             </div>
         </div>

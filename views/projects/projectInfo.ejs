@@ -4,7 +4,7 @@
         <h1><%=project.title%></h1>
       </div>
     <div class="ProjectView">
-      <div class="ProjectVPhoto">
+      <div class="ProjectVPhoto" style="margin-bottom: 70px;">
         <div id="campgroundCarousel" class="carousel slide" data-ride="carousel">
           <div class="carousel-inner">
               <% project.images.forEach((img, i) => {  %>
@@ -78,11 +78,16 @@
                 <h2>All comments</h2><br>
             <ul>
               <% for(let review of reviews) { %>
+                <% url3=`/goToProfile/${review.accountId}`; %>
+    <% if(currentUser && review.accountId.toString() === currentUser._id.toString()){%>
+        <% url3=`/profile`; %>
+        <%}%>
               <li><% if(review.imageURL){%>
                 <img src="<%= review.imageURL %>" id="profileImage"  style="height: 40px; width: 40px;">
                 <%}else{%>
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiZfk_mBRRAnMVpDjIrMbiU5DUxjWeZ5nqRQ&usqp=CAU" id="profileImage"  style="height: 40px; width: 40px;">
-                <%}%><%= review.author %>:</li>
+                <%}%>
+                <a href=<%=url3 %> style="text-decoration:none; color:grey"><%= review.author %>:</a></li>
               <p class="starability-result" data-rating="<%=review.rating%>">
                 Rated: <%= review.rating %> stars
             </p>
@@ -118,7 +123,7 @@
        
         
       </div>
-      <div class="ProjectRec">
+      <div class="container mr-5 mr-lg-0" id="reco">
         <h1>Recommended project</h1><hr><br>
         <% for(let project of projects){ %>
           <% url3=`/goToProfile/${project.id}`; %>
@@ -130,8 +135,6 @@
                     <li class="text-muted">By: <a href=<%=url3 %> style="text-decoration:none; color:grey"><%= project.author %></a>
                   </a><hr>
           <% }%>
-        <div>
         </div>
-      </div>
     </div>
   </div>
